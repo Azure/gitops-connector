@@ -1,0 +1,23 @@
+
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Build_Push_Image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read    
+    steps:
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v2
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: kaizentm/gitops-connector/gitops-connector
+          tags: 0.0.${{ github.run_number }}          
