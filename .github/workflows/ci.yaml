@@ -9,6 +9,7 @@ on:
 jobs:
   Build_Push_Image:
     runs-on: ubuntu-latest
+    #public
     steps:
       - name: Checkout
         uses: actions/checkout@v2
