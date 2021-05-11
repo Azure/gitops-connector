@@ -21,8 +21,8 @@ jobs:
         name: Docker Linting
         with:
           dockerfile: ./src/Dockerfile
-      - name: MD Linting
-        uses: actionshub/markdownlint@main          
+      # - name: MD Linting
+      #   uses: actionshub/markdownlint@main          
 
   Build_Push_Image:
     runs-on: ubuntu-latest
