@@ -9,3 +9,7 @@ class GitCommitStatus:
     callback_url: str
     gitops_operator: str
     genre: str
+
+    def __lt__(self, other):
+        # Status messages need to come last.
+        return self.genre != "Status"
