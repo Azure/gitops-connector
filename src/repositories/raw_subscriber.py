@@ -15,13 +15,17 @@ class RawSubscriber:
         logging.debug("Sending raw json to subscriber: " + json.dumps(json_data))
         response = requests.post(url=self._url_endpoint, json=json_data)
 
+
 class RawSubscriberFactory:
     @staticmethod
     def new_raw_subscribers() -> list[RawSubscriber]:
+        subscribers = []
+
         # TODO(tcare): Dynamically pick up subscribers via CRD or similar
         # Currently we only have one subscriber
-        subscribers = []
-        subscriber = RawSubscriber(os.getenv("SPEKTATE_ENDPOINT"))
-        subscribers.append(subscriber)
+        endpoint = os.getenv("RAW_SUBSCRIBER_ENDPOINT")
+        if endpoint:
+            subscriber = RawSubscriber(endpoint)
+            subscribers.append(subscriber)
 
         return subscribers
