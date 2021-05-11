@@ -7,11 +7,25 @@ on:
       - main
 
 jobs:
+  code_quality_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: TrueBrain/actions-flake8@master
+        name: Linting
+        if: "true"
+        with:
+          path: ./src    
+      - uses: hadolint/hadolint-action@v1.5.0
+        name: Docker Linting
+        with:
+          dockerfile: ./src/Dockerfile
+      - name: MD Linting
+        uses: actionshub/markdownlint@main          
+
   Build_Push_Image:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v2

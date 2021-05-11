@@ -1,0 +1,25 @@
+name: PR
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  code_quality_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: TrueBrain/actions-flake8@master
+        name: Linting
+        if: "true"
+        with:
+          path: ./src    
+      - uses: hadolint/hadolint-action@v1.5.0
+        name: Docker Linting
+        with:
+          dockerfile: ./src/Dockerfile
+      - name: MD Linting
+        uses: actionshub/markdownlint@main          
+
+     #TODO: Yaml linting (kube-score, yamllint)   
