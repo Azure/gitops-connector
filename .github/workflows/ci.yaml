@@ -41,11 +41,15 @@ jobs:
            echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV          
            echo $IMAGE_TAG > $GITHUB_WORKSPACE/IMAGE_TAG
            cat $GITHUB_WORKSPACE/IMAGE_TAG
+      - name: Check Image Tag
+        run: |
+           echo $IMAGE_TAG
+           echo ${{ IMAGE_TAG }}           
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
           context: ./src
-          tags: kaizentm/gitops-connector:$IMAGE_TAG, kaizentm/gitops-connector:latest         
+          tags: kaizentm/gitops-connector:${{ IMAGE_TAG }}, kaizentm/gitops-connector:latest         
 
 
           
