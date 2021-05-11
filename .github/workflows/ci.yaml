@@ -37,8 +37,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}        
       - name: Generate Image Tag
         run: |
-           echo "IMAGE_TAG=${{ secrets.MAJOR_VERSION }}.${{ secrets.MINOR_VERSION }}.${{ github.run_number }}" >> $GITHUB_ENV          
-           echo "$IMAGE_TAG" > $GITHUB_WORKSPACE/IMAGE_TAG
+           IMAGE_TAG=${{ secrets.MAJOR_VERSION }}.${{ secrets.MINOR_VERSION }}.${{ github.run_number }}
+           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV          
+           echo $IMAGE_TAG > $GITHUB_WORKSPACE/IMAGE_TAG
            cat $GITHUB_WORKSPACE/IMAGE_TAG
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
