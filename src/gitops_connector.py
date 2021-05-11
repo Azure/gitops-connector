@@ -11,7 +11,6 @@ class GitopsConnector:
         self._git_repository = GitRepositoryFactory.new_git_repository()
         self._cicd_orchestrator = CicdOrchestratorFactory.new_cicd_orchestrator(self._git_repository)
 
-
     def process_gitops_phase(self, phase_data):
         if self._gitops_operator.is_supported_message(phase_data):
             self._post_commit_statuses(phase_data)
@@ -23,7 +22,7 @@ class GitopsConnector:
         commit_statuses = self._gitops_operator.extract_commit_statuses(phase_data)
         for commit_status in commit_statuses:
             self._git_repository.post_commit_status(commit_status)
-        
+
     def _notify_orchestrator(self, phase_data):
         is_finished, is_successful = self._gitops_operator.is_finished(phase_data)
         if is_finished:
@@ -38,4 +37,4 @@ class GitopsConnector:
 
 
 if __name__ == "__main__":
-     git_ops_connector = GitopsConnector()  
+    git_ops_connector = GitopsConnector()
