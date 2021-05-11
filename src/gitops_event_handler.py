@@ -15,6 +15,7 @@ application = Flask(__name__)
 
 gitops_connector = GitopsConnector()
 
+
 @application.route("/gitopsphase", methods=['POST'])
 def gitopsphase():
     payload = request.get_json()
@@ -25,13 +26,17 @@ def gitopsphase():
 
     return f'GitOps phase: {payload}', 200
 
+
 # Periodic PR cleanup task
 cleanup_task = Timeloop()
+
+
 @cleanup_task.job(interval=timedelta(seconds=PR_CLEANUP_INTERVAL))
 def pr_polling_thread_worker():
     logging.info("Starting periodic PR cleanup")
     gitops_connector.notify_abandoned_pr_tasks()
     logging.info(f'Finished PR cleanup, sleeping for {PR_CLEANUP_INTERVAL} seconds...')
+
 
 def interrupt():
     if not DISABLE_POLLING_PR_TASK:

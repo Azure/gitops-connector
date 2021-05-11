@@ -1,11 +1,11 @@
 import utils
-import logging
 from operators.argo_gitops_operator import ArgoGitopsOperator
 from operators.flux_gitops_operator import FluxGitopsOperator
 from operators.gitops_operator import GitopsOperatorInterface
 
 FLUX_TYPE = "FLUX"
 ARGOCD_TYPE = "ARGOCD"
+
 
 class GitopsOperatorFactory:
 
@@ -19,6 +19,3 @@ class GitopsOperatorFactory:
             return ArgoGitopsOperator()
         else:
             raise NotImplementedError(f'The GitOps operator {gitops_operator_type} is not supported')
-    
-
-

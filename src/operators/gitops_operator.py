@@ -1,6 +1,7 @@
 import utils
 from abc import ABC, abstractmethod
 
+
 class GitopsOperatorInterface(ABC):
 
     def __init__(self):
@@ -9,7 +10,7 @@ class GitopsOperatorInterface(ABC):
     @abstractmethod
     def extract_commit_statuses(self, phase_data):
         pass
-    
+
     @abstractmethod
     def is_finished(self, phase_data) -> bool:
         pass
@@ -21,6 +22,3 @@ class GitopsOperatorInterface(ABC):
     @abstractmethod
     def is_supported_message(self, phase_data) -> bool:
         pass
-
-
-
