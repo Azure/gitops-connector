@@ -7,6 +7,7 @@ KUSTOMIZATION_PHASE = "Kustomization"
 PROGRESSING_SATE = "Progressing"
 HEALTH_CHECK_FAILED_SATE = "HealthCheckFailed"
 
+
 class FluxGitopsOperator(GitopsOperatorInterface):
 
     def extract_commit_statuses(self, phase_data):
@@ -15,9 +16,10 @@ class FluxGitopsOperator(GitopsOperatorInterface):
         commit_id = self.get_commit_id(phase_data)
 
         reason_state = phase_data['reason']
-        reason_message = self._map_reason_to_description(reason_state, phase_data['message'])
+        reason_message = self._map_reason_to_description(
+            reason_state,
+            phase_data['message'])
         kind = self._get_message_kind(phase_data)
-
 
         # For Kustomization we have more detailed data to parse in addition to status.
         if self._get_message_kind(phase_data) == KUSTOMIZATION_PHASE:
@@ -25,7 +27,6 @@ class FluxGitopsOperator(GitopsOperatorInterface):
                 self._add_progression_summary(phase_data, commit_id, commit_statuses, kind)
             elif phase_data['reason'] == HEALTH_CHECK_FAILED_SATE:
                 self._add_health_check_summary(phase_data, commit_id, commit_statuses, reason_message, kind)
-
 
         # Generic status message regardless of kind.
         status = self._new_git_commit_status(
@@ -43,25 +44,25 @@ class FluxGitopsOperator(GitopsOperatorInterface):
         if progression_summary:
             for (resource_name, status_msg) in progression_summary.items():
                 status = self._new_git_commit_status(
-                    commit_id = commit_id,
-                    status_name = resource_name,
+                    commit_id=commit_id,
+                    status_name=resource_name,
                     # As far as the Kustomize controller is concerned, these are finished
                     # before reconciliation starts. We don't want this to affect the overall
                     # status, so map to the relevant N/A status in the Git repo provider.
-                    state = "NotApplicable",
-                    message = status_msg,
+                    state="NotApplicable",
+                    message=status_msg,
                     kind=kind)
                 commit_statuses.append(status)
-    
+
     def _add_health_check_summary(self, phase_data, commit_id, commit_statuses, reason_message, kind):
         health_check_summary = self._parse_health_check_summary(phase_data)
         if health_check_summary:
             for resource_name in health_check_summary:
                 status = self._new_git_commit_status(
-                    commit_id = commit_id,
-                    status_name = resource_name,
-                    state = HEALTH_CHECK_FAILED_SATE,
-                    message = reason_message,
+                    commit_id=commit_id,
+                    status_name=resource_name,
+                    state=HEALTH_CHECK_FAILED_SATE,
+                    message=reason_message,
                     kind=kind)
                 commit_statuses.append(status)
 
@@ -71,21 +72,20 @@ class FluxGitopsOperator(GitopsOperatorInterface):
         resources_array_start = raw_message.index("[")
         resources_array_end = raw_message.index("]")
         if resources_array_start > 0 and resources_array_end > 0 and resources_array_end > resources_array_start:
-            resources_string = raw_message[resources_array_start + 1 : resources_array_end - 1]
+            resources_string = raw_message[resources_array_start + 1: resources_array_end - 1]
             if resources_string:
                 resources = [r.strip() for r in resources_string.split(", ")]
-                 
+
         if not resources:
             resources.append(raw_message)
         return resources
 
-
-    def _new_git_commit_status(self,commit_id, status_name, state, message, kind):
+    def _new_git_commit_status(self, commit_id, status_name, state, message, kind):
         return GitCommitStatus(
-            commit_id = commit_id,
-            status_name = status_name,
-            state = state,
-            message =message,
+            commit_id=commit_id,
+            status_name=status_name,
+            state=state,
+            message=message,
             callback_url=self.callback_url,
             gitops_operator='Flux',
             genre=kind)
@@ -174,9 +174,9 @@ class FluxGitopsOperator(GitopsOperatorInterface):
                 (resource_type, _, _) = resource.partition("/")
                 status_map[resource_type][status] += 1
 
-            # Build the status string array            
+            # Build the status string array
             for (resource_name, statuses) in status_map.items():
-                ## service:
+                # service:
                 summary = ""
                 first = True
                 for (status_name, status_count) in statuses.items():
@@ -189,7 +189,7 @@ class FluxGitopsOperator(GitopsOperatorInterface):
 
             if warning_count > 0:
                 status_arr['warnings'] = f'Warnings: {warning_count}'
-        except:
+        except RuntimeError:
             status_arr['Info'] = raw_message
 
         return status_arr

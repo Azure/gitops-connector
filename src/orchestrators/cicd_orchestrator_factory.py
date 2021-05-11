@@ -1,5 +1,4 @@
 import utils
-import logging
 from orchestrators.cicd_orchestrator import CicdOrchestratorInterface
 from repositories.git_repository import GitRepositoryInterface
 from orchestrators.azdo_cicd_orchestrator import AzdoCicdOrchestrator
@@ -7,6 +6,7 @@ from orchestrators.azdo_cicd_orchestrator import AzdoCicdOrchestrator
 
 GITHUB_TYPE = "GITHUB"
 AZDO_TYPE = "AZDO"
+
 
 class CicdOrchestratorFactory:
 
@@ -20,6 +20,3 @@ class CicdOrchestratorFactory:
         #     return GitHubCicdOrchestrator()
         else:
             raise NotImplementedError(f'The CI/CD orchestrator {cicd_orchestrator_type} is not supported')
-    
-
-
