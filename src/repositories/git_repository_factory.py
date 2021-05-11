@@ -1,11 +1,11 @@
 import os
-import logging
 from repositories.git_repository import GitRepositoryInterface
 from repositories.azdo_git_repository import AzdoGitRepository
 
 
 AZDO_TYPE = "AZDO"
 GITHUB_TYPE = "GITHUB"
+
 
 class GitRepositoryFactory:
 
@@ -19,6 +19,3 @@ class GitRepositoryFactory:
             return AzdoGitRepository()
         else:
             raise NotImplementedError(f'The Git repository {git_repository_type} is not supported')
-    
-
-

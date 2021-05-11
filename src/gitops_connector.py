@@ -66,4 +66,4 @@ class GitopsConnector:
                 subscriber.post_commit_status(commit_status)
 
 if __name__ == "__main__":
-     git_ops_connector = GitopsConnector()
+    git_ops_connector = GitopsConnector()

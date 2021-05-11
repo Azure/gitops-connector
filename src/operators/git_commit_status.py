@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class GitCommitStatus:
     commit_id: str

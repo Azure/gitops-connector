@@ -1,10 +1,8 @@
-import json
-from threading import Lock
 import logging
 import requests
 from datetime import datetime, timedelta
 import dateutil.parser
-from orchestrators.cicd_orchestrator import CicdOrchestratorInterface 
+from orchestrators.cicd_orchestrator import CicdOrchestratorInterface
 from repositories.git_repository import GitRepositoryInterface
 from clients.azdo_client import AzdoClient
 
@@ -15,13 +13,13 @@ TASK_CUTOFF_DURATION = timedelta(minutes=MAX_TASK_TIMEOUT)
 
 class AzdoCicdOrchestrator(CicdOrchestratorInterface):
 
-    def __init__(self, git_repository: GitRepositoryInterface):    
+    def __init__(self, git_repository: GitRepositoryInterface):
         super().__init__(git_repository)
         self.azdo_client = AzdoClient()
         self.headers = self.azdo_client.get_rest_api_headers()
 
     def notify_on_deployment_completion(self, commit_id, is_successful):
-        pr_num = self.git_repository.get_pr_num(commit_id)        
+        pr_num = self.git_repository.get_pr_num(commit_id)
         if pr_num:
             self._update_pr_task(is_successful, pr_num)
 
@@ -39,7 +37,6 @@ class AzdoCicdOrchestrator(CicdOrchestratorInterface):
             state = 'succeeded'
         else:
             state = 'failed'
-
 
         # The build task may have been cancelled, timed out, etc.
         # Working with the plan in this state can cause 500 errors.
@@ -126,4 +123,3 @@ class AzdoCicdOrchestrator(CicdOrchestratorInterface):
             # update_pr_task returns True if the task was updated.
             return not self._update_pr_task(False, str(pr_num), is_alive=False)
         return True
-

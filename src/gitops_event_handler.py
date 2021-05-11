@@ -17,6 +17,7 @@ application = Flask(__name__)
 
 gitops_connector = GitopsConnector()
 
+
 @application.route("/gitopsphase", methods=['POST'])
 def gitopsphase():
     # Use per process timer to stash the time we got the request
@@ -30,8 +31,11 @@ def gitopsphase():
 
     return f'GitOps phase: {payload}', 200
 
+
 # Periodic PR cleanup task
 cleanup_task = Timeloop()
+
+
 @cleanup_task.job(interval=timedelta(seconds=PR_CLEANUP_INTERVAL))
 def pr_polling_thread_worker():
     logging.info("Starting periodic PR cleanup")
