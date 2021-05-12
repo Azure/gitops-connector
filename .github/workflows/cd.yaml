@@ -35,9 +35,11 @@ jobs:
           ls -ltr ${{ github.workspace }}/manifests
       - name: Generate Manifests
         run: |
+          echo $SECRETS
           .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests
-        # env:
-        #   TARGET_NAMESPACE: ${{ secrets.TARGET_NAMESPACE }}
+        env:
+          APP_BUILD_VERSION: ${{ env.IMAGE_TAG }}
+          SECRETS: ${{ secrets }}
         #   VOTE_APP_TITLE: ${{ secrets.VOTE_APP_TITLE }}
         #   DEMO_APP_URL: ${{ secrets.DEMO_APP_URL }}
         #   AZURE_VOTE_IMAGE_REPO: ${{ secrets.AZURE_VOTE_IMAGE_REPO }}
