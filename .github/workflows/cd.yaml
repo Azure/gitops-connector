@@ -1,0 +1,26 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main]
+    types: 
+      - completed
+
+jobs:
+  deploy_to_dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+      - name: Download Image Tags
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          name: image_tags
+          workflow: ci.yml
+          run_id: ${{ github.event.workflow_run.id}}
+          path: ${{ github.workspace }}/IMAGE_TAG
+      - name: Read Image Tags
+        run: |
+          cat ${{ github.workspace }}/IMAGE_TAG
+
+

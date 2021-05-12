@@ -48,5 +48,4 @@ jobs:
           context: ./src
           tags: kaizentm/gitops-connector:${{ env.IMAGE_TAG }}, kaizentm/gitops-connector:latest         
 
-
           
