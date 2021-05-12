@@ -52,4 +52,9 @@ jobs:
         with:
           name: image_tags
           path: ${{ github.workspace }}/IMAGE_TAG
+      - name: Upload Manifests Templates
+        uses: actions/upload-artifact@v2.2.2
+        with:
+          name: manifests
+          path: ${{ github.workspace }}/manifests
           

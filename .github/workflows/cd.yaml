@@ -20,8 +20,18 @@ jobs:
           workflow: ci.yml
           run_id: ${{ github.event.workflow_run.id}}
           path: ${{ github.workspace }}
+      - name: Download Manifests
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          name: manifests
+          workflow: ci.yml
+          run_id: ${{ github.event.workflow_run.id}}
+          path: ${{ github.workspace }}
       - name: Read Image Tags
         run: |
           cat ${{ github.workspace }}/IMAGE_TAG
+      - name: Read Manifests
+        run: |
+          ls -ltr ${{ github.workspace }}/manifests
 
 
