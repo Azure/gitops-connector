@@ -23,11 +23,15 @@ class RawSubscriberFactory:
     def new_raw_subscribers() -> list[RawSubscriber]:
         subscribers = []
 
+        logging.debug("Adding configured subscribers...")
+
         # TODO(tcare): Dynamically pick up subscribers via CRD or similar
         # Currently we only have one subscriber
         endpoint = os.getenv("RAW_SUBSCRIBER_ENDPOINT")
         if endpoint:
             subscriber = RawSubscriber(endpoint)
             subscribers.append(subscriber)
+
+        logging.debug(f'{len(subscribers)} subscribers added.')
 
         return subscribers
