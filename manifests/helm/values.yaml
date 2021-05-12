@@ -1,0 +1,10 @@
+imageName: kaizentm/gitops-connector
+imageTag: $IMAGE_TAG
+containerPort: 8080
+
+gitOpsAppURL: $GITOPS_APP_URL
+azdoGitOpsRepoName: $AZDO_GITOPS_REPO_NAME
+azdoPrRepoName: $AZDO_PR_REPO_NAME
+azdoOrgUrl: $AZDO_ORG_URL
+orchestratorPAT: $ORCHESTRATOR_PAT
+

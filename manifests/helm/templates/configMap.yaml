@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitops-connector-cm
+data:
+  GITOPS_APP_URL: {{  .Values.gitOpsAppURL}}
+  AZDO_GITOPS_REPO_NAME: {{  .Values.azdoGitOpsRepoName}}
+  AZDO_PR_REPO_NAME: {{  .Values.azdoPrRepoName}}
+  AZDO_ORG_URL: {{  .Values.azdoOrgUrl}}
