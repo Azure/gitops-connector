@@ -6,6 +6,7 @@ from repositories.git_repository_factory import GitRepositoryFactory
 from repositories.raw_subscriber import RawSubscriberFactory
 from orchestrators.cicd_orchestrator_factory import CicdOrchestratorFactory
 
+
 # Instance is shared across threads.
 class GitopsConnector:
 
@@ -64,6 +65,7 @@ class GitopsConnector:
 
             for subscriber in self._raw_subscribers:
                 subscriber.post_commit_status(commit_status)
+
 
 if __name__ == "__main__":
     git_ops_connector = GitopsConnector()

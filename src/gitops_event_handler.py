@@ -42,11 +42,13 @@ def pr_polling_thread_worker():
     gitops_connector.notify_abandoned_pr_tasks()
     logging.info(f'Finished PR cleanup, sleeping for {PR_CLEANUP_INTERVAL} seconds...')
 
+
 # Git status queue drain task
 def init_commit_status_thread():
     logging.info("Starting commit status thread")
     status_thread = Thread(target=gitops_connector.drain_commit_status_queue)
     status_thread.run()
+
 
 def interrupt():
     if not DISABLE_POLLING_PR_TASK:

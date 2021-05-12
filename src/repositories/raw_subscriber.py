@@ -5,6 +5,7 @@ import logging
 import os
 import requests
 
+
 # An endpoint that handles unprocessed JSON forwarded from notifications.
 class RawSubscriber:
     def __init__(self, url_endpoint):
@@ -14,6 +15,7 @@ class RawSubscriber:
         json_data = dataclasses.asdict(commit_status[1])
         logging.debug("Sending raw json to subscriber: " + json.dumps(json_data))
         response = requests.post(url=self._url_endpoint, json=json_data)
+        response.raise_for_status()
 
 
 class RawSubscriberFactory:
