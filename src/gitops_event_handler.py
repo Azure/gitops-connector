@@ -47,7 +47,7 @@ def pr_polling_thread_worker():
 def init_commit_status_thread():
     logging.info("Starting commit status thread")
     status_thread = Thread(target=gitops_connector.drain_commit_status_queue)
-    status_thread.run()
+    status_thread.start()
 
 
 def interrupt():
