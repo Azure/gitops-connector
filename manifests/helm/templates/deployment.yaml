@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitops-connector  
+  labels:
+    app: gitops-connector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitops-connector
+  template:
+    metadata:
+      labels:
+        app: gitops-connector
+    spec:
+      containers:
+      - name: connector
+        image: {{  .Values.imageName}}:{{  .Values.imageTag}}
+        env:
+        - name: GITOPS_APP_URL
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITOPS_APP_URL
+        - name: AZDO_GITOPS_REPO_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: AZDO_GITOPS_REPO_NAME
+        - name: AZDO_PR_REPO_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: AZDO_PR_REPO_NAME
+        - name: AZDO_ORG_URL
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: AZDO_ORG_URL
+        - name: PAT
+          valueFrom:
+            secretKeyRef:
+              name: gitops-connector-secret
+              key: PAT
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: {{  .Values.containerPort}}

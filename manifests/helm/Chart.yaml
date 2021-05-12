@@ -1,0 +1,8 @@
+apiVersion: v2
+name: gitops-connector
+description: A Helm chart for GitOps connector
+
+type: application
+
+version: $APP_BUILD_VERSION
+
