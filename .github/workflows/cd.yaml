@@ -10,6 +10,7 @@ on:
 jobs:
   deploy_to_dev:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -43,12 +44,8 @@ jobs:
           AZDO_PR_REPO_NAME: ${{ secrets.AZDO_PR_REPO_NAME }}
           AZDO_ORG_URL: ${{ secrets.AZDO_ORG_URL }}
           ORCHESTRATOR_PAT: ${{ secrets.ORCHESTRATOR_PAT }}
-
-        #   VOTE_APP_TITLE: ${{ secrets.VOTE_APP_TITLE }}
-        #   DEMO_APP_URL: ${{ secrets.DEMO_APP_URL }}
-        #   AZURE_VOTE_IMAGE_REPO: ${{ secrets.AZURE_VOTE_IMAGE_REPO }}
-      # - name: Create PR
-      #   run: |
-      #     ${{ github.workspace }}/${{ secrets.UTILS_ARTIFACT_PATH }}/create-pr.sh -s ${{ github.workspace }}/gen_manifests -d ${{ secrets.MANIFESTS_FOLDER }} -r ${{ secrets.MANIFESTS_REPO }} -b ${{ secrets.MANIFESTS_BRANCH }} -i $GITHUB_RUN_ID -t ${{ secrets.PAT }} -e ${{ secrets.ENVIRONMENT_NAME }} -p ${{ secrets.PLATFORM }}
+      - name: Create PR
+        run: |
+          .github/workflows/utils//create-pr.sh -s ${{ github.workspace }}/gen_manifests -d ${{ secrets.MANIFESTS_FOLDER }} -r ${{ secrets.MANIFESTS_REPO }} -b ${{ secrets.MANIFESTS_BRANCH }} -i $GITHUB_RUN_ID -t $GITHUB_TOKEN -e ${{ secrets.ENVIRONMENT_NAME }}
 
 
