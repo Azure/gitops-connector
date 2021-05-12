@@ -75,6 +75,8 @@ if [[ `git status --porcelain | head -1` ]]; then
     curl -H "Authorization: token $TOKEN" -H "Content-Type: application/json" --fail \
        -d '{"head":"refs/heads/'$deploy_branch_name'", "base":"refs/heads/'$DEST_BRANCH'", "body":"Deploy to '$ENV_NAME'", "title":"deployment '$DEPLOY_ID'"}' \
        "https://api.github.com/repos/$owner_repo/pulls"
+       
+    # This cli is still very buggy:
     # echo $TOKEN | gh auth login --with-token 
     # pr_response=$(gh pr create --base $DEST_BRANCH --head $deploy_branch_name --title "deployment '$DEPLOY_ID'")
     echo $pr_response
