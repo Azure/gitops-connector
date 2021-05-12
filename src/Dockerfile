@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM python:3.9-slim
 
 ENV APP_HOME /app
 ENV WORKERS 1
