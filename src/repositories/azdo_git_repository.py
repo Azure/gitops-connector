@@ -5,7 +5,7 @@ from clients.azdo_client import AzdoClient
 from repositories.git_repository import GitRepositoryInterface
 
 
-PR_METADATA_KEY = "argocd-callback-task-id"
+PR_METADATA_KEY = "callback-task-id"
 
 
 class AzdoGitRepository(GitRepositoryInterface):
