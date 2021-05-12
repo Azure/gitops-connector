@@ -47,5 +47,9 @@ jobs:
       #     push: true
       #     context: ./src
       #     tags: kaizentm/gitops-connector:${{ env.IMAGE_TAG }}, kaizentm/gitops-connector:latest         
-
+      - name: Upload Image Tags
+        uses: actions/upload-artifact@v2.2.2
+        with:
+          name: image_tags
+          path: ${{ github.workspace }}/IMAGE_TAG
           
