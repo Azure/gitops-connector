@@ -44,7 +44,7 @@ echo "git status"
 git status
 
 # Create a new branch 
-deploy_branch_name=deploy/$DEPLOY_ID/$BACKEND_IMAGE/$DEST_BRANCH
+deploy_branch_name=deploy/$DEPLOY_ID/$IMAGE_TAG/$DEST_BRANCH
 
 echo "Create a new branch $deploy_branch_name"
 git checkout -b $deploy_branch_name
