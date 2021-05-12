@@ -29,9 +29,20 @@ jobs:
           path: ${{ github.workspace }}
       - name: Read Image Tags
         run: |
-          cat ${{ github.workspace }}/IMAGE_TAG
+          echo "IMAGE_TAG=$(cat ${{ github.workspace }}/IMAGE_TAG)" >> $GITHUB_ENV          
       - name: Read Manifests
         run: |
           ls -ltr ${{ github.workspace }}/manifests
+      - name: Generate Manifests
+        run: |
+          .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests
+        # env:
+        #   TARGET_NAMESPACE: ${{ secrets.TARGET_NAMESPACE }}
+        #   VOTE_APP_TITLE: ${{ secrets.VOTE_APP_TITLE }}
+        #   DEMO_APP_URL: ${{ secrets.DEMO_APP_URL }}
+        #   AZURE_VOTE_IMAGE_REPO: ${{ secrets.AZURE_VOTE_IMAGE_REPO }}
+      # - name: Create PR
+      #   run: |
+      #     ${{ github.workspace }}/${{ secrets.UTILS_ARTIFACT_PATH }}/create-pr.sh -s ${{ github.workspace }}/gen_manifests -d ${{ secrets.MANIFESTS_FOLDER }} -r ${{ secrets.MANIFESTS_REPO }} -b ${{ secrets.MANIFESTS_BRANCH }} -i $GITHUB_RUN_ID -t ${{ secrets.PAT }} -e ${{ secrets.ENVIRONMENT_NAME }} -p ${{ secrets.PLATFORM }}
 
 
