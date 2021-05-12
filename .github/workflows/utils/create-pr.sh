@@ -72,7 +72,7 @@ if [[ `git status --porcelain | head -1` ]]; then
     #pr_response=$(curl -H "Authorization: token $TOKEN" -H "Content-Type: application/json" --fail \
     #    -d '{"head":"refs/heads/'$deploy_branch_name'", "base":"refs/heads/'$DEST_BRANCH'", "body":"Deploy to '$ENV_NAME'", "title":"deployment '$DEPLOY_ID'"}' \
     #    "https://api.github.com/repos/$owner_repo/pulls")
-    echo $TOKEN | gh auth login
+    echo $TOKEN | gh auth login --with-token 
     pr_response=$(gh pr create --base $DEST_BRANCH --head $deploy_branch_name --title "deployment '$DEPLOY_ID'")
     echo $pr_response
 fi 
