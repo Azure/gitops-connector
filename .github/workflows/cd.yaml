@@ -35,11 +35,15 @@ jobs:
           ls -ltr ${{ github.workspace }}/manifests
       - name: Generate Manifests
         run: |
-          echo $SECRETS
           .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests
         env:
           APP_BUILD_VERSION: ${{ env.IMAGE_TAG }}
-          SECRETS: ${{ secrets }}
+          GITOPS_APP_URL: ${{ secrets.GITOPS_APP_URL }}
+          AZDO_GITOPS_REPO_NAME: ${{ secrets.AZDO_GITOPS_REPO_NAME }}
+          AZDO_PR_REPO_NAME: ${{ secrets.AZDO_PR_REPO_NAME }}
+          AZDO_ORG_URL: ${{ secrets.AZDO_ORG_URL }}
+          ORCHESTRATOR_PAT: ${{ secrets.ORCHESTRATOR_PAT }}
+
         #   VOTE_APP_TITLE: ${{ secrets.VOTE_APP_TITLE }}
         #   DEMO_APP_URL: ${{ secrets.DEMO_APP_URL }}
         #   AZURE_VOTE_IMAGE_REPO: ${{ secrets.AZURE_VOTE_IMAGE_REPO }}
