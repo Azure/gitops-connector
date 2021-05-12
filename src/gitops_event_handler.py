@@ -3,6 +3,8 @@ import logging
 from timeloop import Timeloop
 from datetime import timedelta
 import atexit
+import time
+from threading import Thread
 from gitops_connector import GitopsConnector
 
 # Time in seconds between background PR cleanup jobs
@@ -18,11 +20,14 @@ gitops_connector = GitopsConnector()
 
 @application.route("/gitopsphase", methods=['POST'])
 def gitopsphase():
+    # Use per process timer to stash the time we got the request
+    req_time = time.monotonic_ns()
+
     payload = request.get_json()
 
     logging.debug(f'GitOps phase: {payload}')
 
-    gitops_connector.process_gitops_phase(payload)
+    gitops_connector.process_gitops_phase(payload, req_time)
 
     return f'GitOps phase: {payload}', 200
 
@@ -38,6 +43,13 @@ def pr_polling_thread_worker():
     logging.info(f'Finished PR cleanup, sleeping for {PR_CLEANUP_INTERVAL} seconds...')
 
 
+# Git status queue drain task
+def init_commit_status_thread():
+    logging.info("Starting commit status thread")
+    status_thread = Thread(target=gitops_connector.drain_commit_status_queue)
+    status_thread.start()
+
+
 def interrupt():
     if not DISABLE_POLLING_PR_TASK:
         cleanup_task.stop()
@@ -45,6 +57,7 @@ def interrupt():
 
 if not DISABLE_POLLING_PR_TASK:
     cleanup_task.start()
+    init_commit_status_thread()
     atexit.register(interrupt)
 
 if __name__ == "__main__":

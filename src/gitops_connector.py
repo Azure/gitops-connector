@@ -1,9 +1,13 @@
 import logging
+from queue import PriorityQueue
+
 from operators.gitops_operator_factory import GitopsOperatorFactory
 from repositories.git_repository_factory import GitRepositoryFactory
+from repositories.raw_subscriber import RawSubscriberFactory
 from orchestrators.cicd_orchestrator_factory import CicdOrchestratorFactory
 
 
+# Instance is shared across threads.
 class GitopsConnector:
 
     def __init__(self):
@@ -11,17 +15,23 @@ class GitopsConnector:
         self._git_repository = GitRepositoryFactory.new_git_repository()
         self._cicd_orchestrator = CicdOrchestratorFactory.new_cicd_orchestrator(self._git_repository)
 
-    def process_gitops_phase(self, phase_data):
+        # Subscribers that take unprocessed JSON, forwarded from the notifications
+        self._raw_subscribers = RawSubscriberFactory.new_raw_subscribers()
+
+        # Commit status notification queue
+        self._global_message_queue = PriorityQueue()
+
+    def process_gitops_phase(self, phase_data, req_time):
         if self._gitops_operator.is_supported_message(phase_data):
-            self._post_commit_statuses(phase_data)
+            self._queue_commit_statuses(phase_data, req_time)
             self._notify_orchestrator(phase_data)
         else:
             logging.debug(f'Message is not supported: {phase_data}')
 
-    def _post_commit_statuses(self, phase_data):
+    def _queue_commit_statuses(self, phase_data, req_time):
         commit_statuses = self._gitops_operator.extract_commit_statuses(phase_data)
         for commit_status in commit_statuses:
-            self._git_repository.post_commit_status(commit_status)
+            self._global_message_queue.put(item=(req_time, commit_status))
 
     def _notify_orchestrator(self, phase_data):
         is_finished, is_successful = self._gitops_operator.is_finished(phase_data)
@@ -29,11 +39,32 @@ class GitopsConnector:
             commit_id = self._gitops_operator.get_commit_id(phase_data)
             self._cicd_orchestrator.notify_on_deployment_completion(commit_id, is_successful)
 
+    # Entrypoint for the periodic task to search for abandoned PRs linked to
+    # agentless tasks.
     def notify_abandoned_pr_tasks(self):
         try:
             self._cicd_orchestrator.notify_abandoned_pr_tasks()
         except Exception as e:
             logging.error(f'Failed to notify abandoned PRs: {e}')
+
+    # Entrypoint for the commit status thread.
+    # The thread waits for items in the priority queue and sends the messages
+    # in the order of the request received time.
+    def drain_commit_status_queue(self):
+        while (True):
+            # Blocking get
+            commit_status = self._global_message_queue.get()
+
+            if not commit_status:
+                break
+
+            # Queue entry is (received time, commit_status)
+            commit_status = commit_status[1]
+
+            self._git_repository.post_commit_status(commit_status)
+
+            for subscriber in self._raw_subscribers:
+                subscriber.post_commit_status(commit_status)
 
 
 if __name__ == "__main__":
