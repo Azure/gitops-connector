@@ -59,13 +59,6 @@ class AzdoGitRepository(GitRepositoryInterface):
                 return json.loads(entry['$value'])
         return None
 
-    def get_pull_request(self, pr_num):
-        url = f'{self.pr_repository_api}/pullRequests/{pr_num}?api-version=6.1-preview.1'
-        response = requests.get(url=url, headers=self.headers)
-        # Throw appropriate exception if request failed
-        response.raise_for_status()
-        pr = json.loads(response.content)
-        return pr
 
     # Returns an array of PR dictionaries with an optional status filter
     # pr_status values: https://docs.microsoft.com/en-us/rest/api/azure/devops/git/pull%20requests/get%20pull%20requests?view=azure-devops-rest-6.0#pullrequeststatus
@@ -114,7 +107,7 @@ class AzdoGitRepository(GitRepositoryInterface):
         }
         return status_map[status]
 
-    def get_pr_num(self, commit_id) -> str:
+    def get_commit_message(self, commit_id):
         url = f'{self.repository_api}/commits/{commit_id}?api-version=6.0'
 
         response = requests.get(url=url, headers=self.headers)
@@ -123,6 +116,11 @@ class AzdoGitRepository(GitRepositoryInterface):
 
         commit = response.json()
         comment = commit['comment']
+
+        return comment
+    
+    def get_pr_num(self, commit_id) -> str:
+        comment = self.get_commit_message(commit_id)
         MERGED_PR = "Merged PR "
         pr_num = None
         if MERGED_PR in comment:

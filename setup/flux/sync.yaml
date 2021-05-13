@@ -21,10 +21,10 @@ spec:
   interval: 0m10s
   path: ./gitops-connector/manifest
   prune: false
-  healthChecks: 
-    - kind: Deployment
-      name: gitops-connector
-      namespace: dev
+  # healthChecks: 
+  #   - kind: Deployment
+  #     name: gitops-connector
+  #     namespace: dev
   sourceRef:
     kind: GitRepository
     name: gitops-connector-dev
