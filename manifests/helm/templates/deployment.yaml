@@ -18,6 +18,21 @@ spec:
       - name: connector
         image: {{  .Values.imageName}}:{{  .Values.imageTag}}
         env:
+        - name: GIT_REPOSITORY_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GIT_REPOSITORY_TYPE
+        - name: CICD_ORCHESTRATOR_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: CICD_ORCHESTRATOR_TYPE              
+        - name: GITOPS_OPERATOR_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITOPS_OPERATOR_TYPE
         - name: GITOPS_APP_URL
           valueFrom:
             configMapKeyRef:
@@ -38,6 +53,21 @@ spec:
             configMapKeyRef:
               name: gitops-connector-cm
               key: AZDO_ORG_URL
+        - name: GITHUB_GITOPS_REPO_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITHUB_GITOPS_REPO_NAME
+        - name: GITHUB_GITOPS_MANIFEST_REPO_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITHUB_GITOPS_MANIFEST_REPO_NAME
+        - name: GITHUB_ORG_URL
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITHUB_ORG_URL              
         - name: PAT
           valueFrom:
             secretKeyRef:
