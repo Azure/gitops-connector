@@ -1,13 +1,57 @@
 name: Publish
  
+# on:
+#   repository_dispatch:
+#     types: [sync-success]
+
+
 on:
-  repository_dispatch:
-    types: [sync-success]
+  push:
+    branches:
+      - eedorenko/publish-workflow
 
 jobs:
   update_helm_chart:
     name: "Update Helm Chart"
+    environment: prod
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
+    - name: Download Image Tags
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        name: image_tags
+        workflow: ci.yml
+        # run_id: ${{ github.event.workflow_run.id}}
+        run_id: 840415884
+        path: ${{ github.workspace }}
+    - name: Download Manifests
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        name: manifests
+        workflow: ci.yml
+        # run_id: ${{ github.event.workflow_run.id}}
+        run_id: 840415884
+        path: ${{ github.workspace }}
+    - name: Read Image Tags
+      run: |
+        echo "IMAGE_TAG=$(cat ${{ github.workspace }}/IMAGE_TAG)" >> $GITHUB_ENV          
+    - name: Generate Manifests
+      run: |
+        .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests hld_only
+      env:
+          APP_BUILD_VERSION: ${{ env.IMAGE_TAG }}
+                    
+          # GIT_REPOSITORY_TYPE: ${{ env.GIT_REPOSITORY_TYPE }}          
+          # CICD_ORCHESTRATOR_TYPE: ${{ env.CICD_ORCHESTRATOR_TYPE }}
+          # GITOPS_OPERATOR_TYPE: ${{ env.GITOPS_OPERATOR_TYPE }}
+          # GITHUB_GITOPS_REPO_NAME: ${{ env.GH_GITOPS_REPO_NAME }}
+          # GITHUB_GITOPS_MANIFEST_REPO_NAME: ${{ env.GH_GITOPS_MANIFEST_REPO_NAME }}
+          # GITHUB_ORG_URL: ${{ env.GH_ORG_URL }}
+
+          # GITOPS_APP_URL: ${{ secrets.GITOPS_APP_URL }}
+          # AZDO_GITOPS_REPO_NAME: ${{ secrets.AZDO_GITOPS_REPO_NAME }}
+          # AZDO_PR_REPO_NAME: ${{ secrets.AZDO_PR_REPO_NAME }}
+          # AZDO_ORG_URL: ${{ secrets.AZDO_ORG_URL }}
+          ORCHESTRATOR_PAT: ${{ secrets.ORCHESTRATOR_PAT }}

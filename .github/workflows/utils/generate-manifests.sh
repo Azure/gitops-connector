@@ -7,6 +7,7 @@
 # 
 echo $1
 echo $2
+echo $3
 
 export gen_manifests_file_name='gen_manifests.yaml'
 
@@ -30,8 +31,10 @@ for file in `find $1 -name '*.yaml'`; do envsubst <"$file" > "$file"1 && mv "$fi
 # for app in `find $1 -type d -maxdepth 1 -mindepth 1`; do \
 cp -r "$1"/helm $2/hld/
 
+if [ $3 -ne "hld_only" ]
 helm template "$1"/helm > $2/manifest/$gen_manifests_file_name && \
 cat $2/manifest/$gen_manifests_file_name
+fi
 # done
 pwd
 
