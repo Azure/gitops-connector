@@ -6,3 +6,5 @@ type: application
 
 version: $APP_BUILD_VERSION
 
+appVersion: $APP_BUILD_VERSION
+
