@@ -16,9 +16,9 @@ class GitRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def get_pull_request(self, pr_num):
+    def get_prs(self, pr_status):
         pass
 
     @abstractmethod
-    def get_prs(self, pr_status):
+    def get_commit_message(self, commit_id):
         pass

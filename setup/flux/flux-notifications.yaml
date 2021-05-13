@@ -1,0 +1,25 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta1
+kind: Alert
+metadata:
+  name: gitops-connector
+  namespace: flux-system
+spec:
+  eventSeverity: info
+  eventSources:
+  - kind: GitRepository
+    name: gitops-connector-dev
+  - kind: Kustomization
+    name: gitops-connector-dev
+  providerRef:
+    name: gitops-connector
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta1
+kind: Provider
+metadata:
+  name: gitops-connector
+  namespace: flux-system
+spec:
+  type: generic
+  # address: http://gitops-connector:8080/gitopsphase
+  address: http://30a053d50b19.ngrok.io/gitopsphase
+

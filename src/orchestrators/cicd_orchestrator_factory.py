@@ -2,6 +2,7 @@ import utils
 from orchestrators.cicd_orchestrator import CicdOrchestratorInterface
 from repositories.git_repository import GitRepositoryInterface
 from orchestrators.azdo_cicd_orchestrator import AzdoCicdOrchestrator
+from orchestrators.github_cicd_orchestrator import GitHubCicdOrchestrator
 
 
 GITHUB_TYPE = "GITHUB"
@@ -16,7 +17,7 @@ class CicdOrchestratorFactory:
 
         if cicd_orchestrator_type == AZDO_TYPE:
             return AzdoCicdOrchestrator(git_repository)
-        # elif cicd_orchestrator_type == GITHUB_TYPE:
-        #     return GitHubCicdOrchestrator()
+        elif cicd_orchestrator_type == GITHUB_TYPE:
+            return GitHubCicdOrchestrator(git_repository)
         else:
             raise NotImplementedError(f'The CI/CD orchestrator {cicd_orchestrator_type} is not supported')

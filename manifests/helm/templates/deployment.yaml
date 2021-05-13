@@ -18,26 +18,68 @@ spec:
       - name: connector
         image: {{  .Values.imageName}}:{{  .Values.imageTag}}
         env:
+        - name: GIT_REPOSITORY_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GIT_REPOSITORY_TYPE
+        - name: CICD_ORCHESTRATOR_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: CICD_ORCHESTRATOR_TYPE              
+        - name: GITOPS_OPERATOR_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITOPS_OPERATOR_TYPE
         - name: GITOPS_APP_URL
           valueFrom:
             configMapKeyRef:
               name: gitops-connector-cm
               key: GITOPS_APP_URL
+      {{- if eq .Values.gitRepositoryType "AZDO"}}
         - name: AZDO_GITOPS_REPO_NAME
           valueFrom:
             configMapKeyRef:
               name: gitops-connector-cm
               key: AZDO_GITOPS_REPO_NAME
+      {{- end}}              
+      {{- if eq .Values.ciCdOrchestratorType "AZDO"}}
         - name: AZDO_PR_REPO_NAME
           valueFrom:
             configMapKeyRef:
               name: gitops-connector-cm
               key: AZDO_PR_REPO_NAME
+      {{- end}}    
+      {{- if or (eq .Values.gitRepositoryType "AZDO") (eq .Values.ciCdOrchestratorType "AZDO")}}                
         - name: AZDO_ORG_URL
           valueFrom:
             configMapKeyRef:
               name: gitops-connector-cm
               key: AZDO_ORG_URL
+      {{- end}}          
+      {{- if eq .Values.ciCdOrchestratorType "GITHUB"}}              
+        - name: GITHUB_GITOPS_REPO_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITHUB_GITOPS_REPO_NAME
+      {{- end}}                        
+      {{- if eq .Values.gitRepositoryType "GITHUB"}}
+        - name: GITHUB_GITOPS_MANIFEST_REPO_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITHUB_GITOPS_MANIFEST_REPO_NAME
+      {{- end}}                                      
+      {{- if or (eq .Values.gitRepositoryType "GITHUB") (eq .Values.ciCdOrchestratorType "GITHUB")}}
+        - name: GITHUB_ORG_URL
+          valueFrom:
+            configMapKeyRef:
+              name: gitops-connector-cm
+              key: GITHUB_ORG_URL              
+      {{- end}}                                                    
         - name: PAT
           valueFrom:
             secretKeyRef:

@@ -111,14 +111,8 @@ class AzdoCicdOrchestrator(CicdOrchestratorInterface):
         return now - TASK_CUTOFF_DURATION <= closed_datetime
 
     # Returns False if the PR is no longer alive and we notified the task.
-    def _update_abandoned_pr(self, pr_num, pr_data=None):
-        # Skip pulling the PR data if we already have it.
-        if pr_data:
-            pr = pr_data
-        else:
-            pr = self.git_repository.get_pull_request(pr_num)
-
-        pr_status = pr['status']
+    def _update_abandoned_pr(self, pr_num, pr_data):
+        pr_status = pr_data['status']
         if (pr_status == 'abandoned'):
             # update_pr_task returns True if the task was updated.
             return not self._update_pr_task(False, str(pr_num), is_alive=False)
