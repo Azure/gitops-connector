@@ -1,6 +1,4 @@
-import os
 import requests
-import json
 import utils
 from clients.azdo_client import AzdoClient
 from repositories.git_repository import GitRepositoryInterface
@@ -58,7 +56,6 @@ class AzdoGitRepository(GitRepositoryInterface):
                 # At this point, we have the original JSON string we stored.
                 return json.loads(entry['$value'])
         return None
-
 
     # Returns an array of PR dictionaries with an optional status filter
     # pr_status values: https://docs.microsoft.com/en-us/rest/api/azure/devops/git/pull%20requests/get%20pull%20requests?view=azure-devops-rest-6.0#pullrequeststatus
@@ -118,7 +115,7 @@ class AzdoGitRepository(GitRepositoryInterface):
         comment = commit['comment']
 
         return comment
-    
+
     def get_pr_num(self, commit_id) -> str:
         comment = self.get_commit_message(commit_id)
         MERGED_PR = "Merged PR "

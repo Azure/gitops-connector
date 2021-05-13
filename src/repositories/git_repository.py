@@ -18,7 +18,7 @@ class GitRepositoryInterface(ABC):
     @abstractmethod
     def get_prs(self, pr_status):
         pass
-    
+
     @abstractmethod
     def get_commit_message(self, commit_id):
         pass

@@ -8,11 +8,11 @@ from repositories.git_repository import GitRepositoryInterface
 
 
 class GitHubGitRepository(GitRepositoryInterface):
-    
+
     MAX_DESCR_LENGTH = 140
 
     def __init__(self):
-        self.gitops_repo_name = utils.getenv("GITHUB_GITOPS_MANIFEST_REPO_NAME") #gitops-manifests
+        self.gitops_repo_name = utils.getenv("GITHUB_GITOPS_MANIFEST_REPO_NAME")  # gitops-manifests
         self.github_client = GitHubClient()
         self.headers = self.github_client.get_rest_api_headers()
         self.rest_api_url = self.github_client.get_rest_api_url()
@@ -24,12 +24,8 @@ class GitHubGitRepository(GitRepositoryInterface):
         message = commit_status.message
         if len(message) > self.MAX_DESCR_LENGTH:
             message = message[:self.MAX_DESCR_LENGTH]
-        
-        data = {
-            'state': github_state,
-            'description': message,
-            'context': commit_status.status_name
-            }
+
+        data = {'state': github_state, 'description': message, 'context': commit_status.status_name}
         logging.info(f'Url {url}: Headers {self.headers}: Data {data}')
         response = requests.post(url=url, headers=self.headers, json=data)
         # Throw appropriate exception if request failed
@@ -70,7 +66,7 @@ class GitHubGitRepository(GitRepositoryInterface):
     
     def get_commit_message(self, commit_id):
         url = f'{self.rest_api_url}/{self.gitops_repo_name}/commits/{commit_id}'
-        
+
         response = requests.get(url=url, headers=self.headers)
         # Throw appropriate exception if request failed
         response.raise_for_status()
