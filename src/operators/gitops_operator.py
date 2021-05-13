@@ -1,11 +1,12 @@
 import utils
+import os
 from abc import ABC, abstractmethod
 
 
 class GitopsOperatorInterface(ABC):
 
     def __init__(self):
-        self.callback_url = utils.getenv("GITOPS_APP_URL")
+        self.callback_url = os.getenv("GITOPS_APP_URL")
 
     @abstractmethod
     def extract_commit_statuses(self, phase_data):

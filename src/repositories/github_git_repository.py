@@ -1,22 +1,35 @@
 import os
 import requests
 import json
+import utils
+import logging
 from clients.github_client import GitHubClient
 from repositories.git_repository import GitRepositoryInterface
 
 
 class GitHubGitRepository(GitRepositoryInterface):
+    
+    MAX_DESCR_LENGTH = 140
 
     def __init__(self):
-        self.gitops_repo_name = utils.getenv("GITHUB_GITOPS_REPO_NAME") #gitops-manifest
+        self.gitops_repo_name = utils.getenv("GITHUB_GITOPS_REPO_NAME") #gitops-manifests
         self.github_client = GitHubClient()
-        self.headers = self.azdo_client.get_rest_api_headers()
+        self.headers = self.github_client.get_rest_api_headers()
+        self.rest_api_url = self.github_client.get_rest_api_url()
 
     def post_commit_status(self, commit_status):
-        url = f'{self.org_url}/{self.gitops_repo_name}/statuses/{commit_status.commit_id}'
+        url = f'{self.rest_api_url}/{self.gitops_repo_name}/statuses/{commit_status.commit_id}'
 
         github_state = self._map_to_github_state(commit_status.state)
-        data = {'state': github_state, 'description': commit_status.status_name + ": " + commit_status.message, 'context': commit_status.genre }
+        message = commit_status.message
+        if len(message) > self.MAX_DESCR_LENGTH:
+            message = message[:self.MAX_DESCR_LENGTH]
+        # data = {'state': github_state, 'description': commit_status.status_name + ": " + commit_status.message, 'context': commit_status.genre }
+        data = {
+            'state': github_state,
+            'description': message,
+            'context': commit_status.status_name
+            }
         logging.info(f'Url {url}: Headers {self.headers}: Data {data}')
         response = requests.post(url=url, headers=self.headers, json=data)
         # Throw appropriate exception if request failed
@@ -53,6 +66,19 @@ class GitHubGitRepository(GitRepositoryInterface):
 
         }
         return state_map[reason]        
+    
+    
+    def get_pr_num(self, commit_id) -> str:
+        pass
+    
+    def get_pr_metadata(self, commit_id):
+        pass
+    
+    def get_pull_request(self, pr_num):
+        pass
+
+    def get_prs(self, pr_status):
+        pass
 
     # def get_pr_metadata(self, pr_num):
     #     # https://docs.microsoft.com/en-us/rest/api/azure/devops/git/pull%20request%20properties/list?view=azure-devops-rest-6.0

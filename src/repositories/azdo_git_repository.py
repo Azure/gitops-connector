@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import utils
 from clients.azdo_client import AzdoClient
 from repositories.git_repository import GitRepositoryInterface
 
@@ -11,7 +12,7 @@ PR_METADATA_KEY = "callback-task-id"
 class AzdoGitRepository(GitRepositoryInterface):
 
     def __init__(self):
-        self.gitops_repo_name = os.getenv("AZDO_GITOPS_REPO_NAME")
+        self.gitops_repo_name = utils.getenv("AZDO_GITOPS_REPO_NAME")
         self.pr_repo_name = os.getenv("AZDO_PR_REPO_NAME", self.gitops_repo_name)
         self.azdo_client = AzdoClient()
         self.repository_api = f'{self.azdo_client.get_rest_api_url()}/_apis/git/repositories/{self.gitops_repo_name}'
@@ -28,7 +29,7 @@ class AzdoGitRepository(GitRepositoryInterface):
         data = {
             'state': azdo_status,
             'description': commit_status.status_name + ": " + commit_status.message,
-            'targetUrl': commit_status.callback_url + "?noop=" + commit_status.status_name,
+            'targetUrl': commit_status.callback_url + "/" + commit_status.commit_id,
             # Shows up as "genre/name" underneath the message and status.
             'context': {
                 'name': commit_status.status_name,
