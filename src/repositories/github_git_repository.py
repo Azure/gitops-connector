@@ -1,6 +1,4 @@
-import os
 import requests
-import json
 import utils
 import logging
 from clients.github_client import GitHubClient
@@ -31,7 +29,7 @@ class GitHubGitRepository(GitRepositoryInterface):
         # Throw appropriate exception if request failed
         response.raise_for_status()
 
-    def _map_to_github_state(self, reason): 
+    def _map_to_github_state(self, reason):
         state_map = {
             "Suspended": "error",
             "ReconciliationSucceeded": "success",
@@ -61,9 +59,8 @@ class GitHubGitRepository(GitRepositoryInterface):
             "Missing": "failure"
 
         }
-        return state_map[reason]        
-    
-    
+        return state_map[reason]
+
     def get_commit_message(self, commit_id):
         url = f'{self.rest_api_url}/{self.gitops_repo_name}/commits/{commit_id}'
 
@@ -75,12 +72,12 @@ class GitHubGitRepository(GitRepositoryInterface):
         commitMessage = responseJSON['commit']['message']
 
         return commitMessage
-        
+
     def get_pr_num(self, commit_id) -> str:
         pass
-    
+
     def get_pr_metadata(self, commit_id):
         pass
-    
+
     def get_prs(self, pr_status):
         pass

@@ -1,4 +1,5 @@
 import logging
+import utils
 import requests
 from orchestrators.cicd_orchestrator import CicdOrchestratorInterface
 from repositories.git_repository import GitRepositoryInterface
@@ -29,7 +30,7 @@ class GitHubCicdOrchestrator(CicdOrchestratorInterface):
         commitid = commitMessageArray[3]
         logging.info(f'CommitId {commitid}')
         return commitid, runid
-    
+
     def _send_repo_dispatch_event(self, commmit_id, run_id):
         url = f'{self.rest_api_url}/{self.gitops_repo_name}/dispatches'
         event_type = 'sync-success'
