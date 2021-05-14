@@ -41,7 +41,7 @@ cat $2/manifest/$gen_manifests_file_name
 if [ $? -gt 0 ]
   then
     echo "Could not render manifests"
-    return 1
+    exit 1
   fi
 fi
 # done
