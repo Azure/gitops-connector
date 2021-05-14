@@ -59,4 +59,4 @@ jobs:
       run: |
         .github/workflows/utils/publish_helm_chart.sh gen_manifests/hld/helm ${{ secrets.HELM_CHARTS_REPO_NAME }} ${{ secrets.HELM_CHARTS_URL }}
       env:
-          TOKEN: ${{ secrets.ORCHESTRATOR_PAT }}
+          TOKEN: ${{ secrets.HELM_CHARTS_PAT }}
