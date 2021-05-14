@@ -51,6 +51,6 @@ jobs:
           ORCHESTRATOR_PAT: ${{ secrets.ORCHESTRATOR_PAT }}
       - name: Create PR
         run: |        
-          .github/workflows/utils//create-pr.sh -s ${{ github.workspace }}/gen_manifests -d ${{ secrets.MANIFESTS_FOLDER }} -r ${{ secrets.MANIFESTS_REPO }} -b ${{ secrets.MANIFESTS_BRANCH }} -i $GITHUB_RUN_ID -t ${{ secrets.MANIFESTS_PAT }} -e ${{ secrets.ENVIRONMENT_NAME }}
+          .github/workflows/utils//create-pr.sh -s ${{ github.workspace }}/gen_manifests -d ${{ secrets.MANIFESTS_FOLDER }} -r ${{ secrets.MANIFESTS_REPO }} -b ${{ secrets.MANIFESTS_BRANCH }} -i ${{ github.event.workflow_run.id}} -t ${{ secrets.MANIFESTS_PAT }} -e ${{ secrets.ENVIRONMENT_NAME }}
 
 
