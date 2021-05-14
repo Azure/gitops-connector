@@ -40,12 +40,12 @@ jobs:
            IMAGE_TAG=${{ secrets.MAJOR_VERSION }}.${{ secrets.MINOR_VERSION }}.${{ github.run_number }}
            echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV          
            echo $IMAGE_TAG > $GITHUB_WORKSPACE/IMAGE_TAG
-      # - name: Build and Push to Docker Hub
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: true
-      #     context: ./src
-      #     tags: kaizentm/gitops-connector:${{ env.IMAGE_TAG }}, kaizentm/gitops-connector:latest         
+      - name: Build and Push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./src
+          tags: kaizentm/gitops-connector:${{ env.IMAGE_TAG }}, kaizentm/gitops-connector:latest         
       - name: Upload Image Tags
         uses: actions/upload-artifact@v2.2.2
         with:
