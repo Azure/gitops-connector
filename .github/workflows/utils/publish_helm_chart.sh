@@ -26,6 +26,7 @@ repo_url="${CHART_REPO_NAME#http://}"
 repo_url="${CHART_REPO_NAME#https://}"
 repo_url="https://automated:$TOKEN@$repo_url"
 
+echo "git clone $repo_url -b $DEST_BRANCH --depth 1 --single-branch"
 git clone $repo_url -b $DEST_BRANCH --depth 1 --single-branch
 repo=${CHART_REPO_NAME##*/}
 repo_name=${repo%.*}
