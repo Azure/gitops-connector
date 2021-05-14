@@ -28,8 +28,8 @@ mkdir -p $2
 mkdir -p $2/hld
 mkdir -p $2/manifest
 
-# Substitute env variables in all yaml files in the manifest folder
-for file in `find $1 -name '*.yaml'`; do envsubst <"$file" > "$file"1 && mv "$file"1 "$file"; done
+# Substitute env variables in Helm yaml files in the manifest folder
+for file in `find $1 -type f \( -name "values.yaml" -o -name "Chart.yaml" \)`; do envsubst <"$file" > "$file"1 && mv "$file"1 "$file"; done
 
 # Generate manifests
 # for app in `find $1 -type d -maxdepth 1 -mindepth 1`; do \
