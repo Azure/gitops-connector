@@ -9,6 +9,8 @@ echo $1
 echo $2
 echo $3
 
+set -euo pipefail  # fail on error
+
 export gen_manifests_file_name='gen_manifests.yaml'
 
 # Usage:
