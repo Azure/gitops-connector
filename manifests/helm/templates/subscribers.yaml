@@ -1,0 +1,10 @@
+{{ if .Values.subscribers }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitops-connector-cm
+data:
+  {{- range $key, $val := .Values.subscribers }}
+    {{ $key }}: {{ $val | quote }}
+  {{- end }}
+{{ end }}
