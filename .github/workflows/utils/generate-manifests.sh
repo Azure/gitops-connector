@@ -40,7 +40,7 @@ helm template "$1"/helm > $2/manifest/$gen_manifests_file_name && \
 cat $2/manifest/$gen_manifests_file_name
 if [ $? -gt 0 ]
   then
-    error "Could not render manifests"
+    echo "Could not render manifests"
     return 1
   fi
 fi
