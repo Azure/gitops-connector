@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Generates K8s manifests from Helm + Kustomize templates
 # Uses env variables to substitute values 
 # Requires to be installed:  
