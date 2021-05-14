@@ -55,3 +55,8 @@ jobs:
           # AZDO_PR_REPO_NAME: ${{ secrets.AZDO_PR_REPO_NAME }}
           # AZDO_ORG_URL: ${{ secrets.AZDO_ORG_URL }}
           ORCHESTRATOR_PAT: ${{ secrets.ORCHESTRATOR_PAT }}
+    - name: Publish Helm Chart
+      run: |
+        .github/workflows/utils/publish_helm_chart.sh gen_manifests/hld/helm ${{ secrets.HELM_CHARTS_REPO_NAME }} ${{ secrets.HELM_CHARTS_URL }}
+      env:
+          TOKEN: ${{ secrets.ORCHESTRATOR_PAT }}
