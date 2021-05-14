@@ -27,7 +27,11 @@ repo_url="${CHART_REPO_NAME#https://}"
 repo_url="https://automated:$TOKEN@$repo_url"
 
 echo "git clone $repo_url -b $DEST_BRANCH --depth 1 --single-branch"
+
 git clone $repo_url -b $DEST_BRANCH --depth 1 --single-branch
+
+echo "git clone"
+
 repo=${CHART_REPO_NAME##*/}
 repo_name=${repo%.*}
 cp *.tgz $repo_name/
