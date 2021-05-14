@@ -89,3 +89,12 @@ spec:
         ports:
         - name: http
           containerPort: {{  .Values.containerPort}}
+{{ if .Values.subscribers }}
+        volumeMounts:
+        - name: subscribers
+          mountPath: /subscribers
+      volumes:
+      - name: subscribers
+        configMap:
+          name: gitops-connector-subscribers-config
+{{ end }}

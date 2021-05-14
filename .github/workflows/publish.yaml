@@ -2,7 +2,7 @@ name: Publish
  
 on:
   repository_dispatch:
-    types: [disabled-sync-success]
+    types: [sync-success]
 
 jobs:
   update_helm_chart:

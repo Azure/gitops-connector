@@ -14,3 +14,8 @@ orchestratorPAT: $ORCHESTRATOR_PAT
 gitHubGitOpsRepoName: $GITHUB_GITOPS_REPO_NAME
 gitHubGitOpsManifestsRepoName: $GITHUB_GITOPS_MANIFEST_REPO_NAME
 gitHubOrgUrl: $GITHUB_ORG_URL
+
+# Optional list of subscriber endpoints to send raw JSON to
+#subscribers:
+#  sub1: http://localhost:8080/gitopsphase
+#  sub2: http://127.0.0.1:1234/
