@@ -22,4 +22,3 @@ jobs:
       - name: MD Linting
         uses: actionshub/markdownlint@main          
 
-     #TODO: Yaml linting (kube-score, yamllint)   
