@@ -36,7 +36,7 @@ jobs:
           ls -ltr ${{ github.workspace }}/manifests
       - name: Generate Manifests
         run: |
-          .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests
+          .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests all
         env:
           APP_BUILD_VERSION: ${{ env.IMAGE_TAG }}
           GITOPS_APP_URL: ${{ secrets.GITOPS_APP_URL }}
