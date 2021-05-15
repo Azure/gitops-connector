@@ -1,3 +1,5 @@
+![build](https://github.com/kaizentm/gitops-connector/actions/workflows/ci.yml/badge.svg)
+
 # GitOps Connector
 
 GitOps Connector is a custom component with the goal of enriching the integration between Azure DevOps and ArgoCD so the user experience in the entire CI/CD process is smoother and more observable. The whole process can be handled and monitored from Azure DevOps UI.
