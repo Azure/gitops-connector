@@ -1,4 +1,4 @@
-![build](https://github.com/kaizentm/gitops-connector/actions/workflows/ci.yml/badge.svg)
+![build](https://github.com/kaizentm/gitops-connector/actions/workflows/ci.yaml/badge.svg)
 
 # GitOps Connector
 
