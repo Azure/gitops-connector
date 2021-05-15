@@ -13,12 +13,14 @@ During the reconciliation process a GitOps operator notifies on every phase chan
 ## GitOps operators
 
 The GitOps Connector supports the following Git Ops operators:
+
 - [FluxCD](https://fluxcd.io)
 - [ArgoCD](https://argoproj.github.io/argo-cd/)
 
 ## Git Commit Status Update
 
 The GitOps Connector supports the following Git repositories:
+
 - [Azure Repos](https://azure.microsoft.com/services/devops/repos/)
 - [GitHub](https://github.com)
 
