@@ -8,18 +8,6 @@ WORKDIR $APP_HOME
 COPY . ./
 ENV PYTHONUNBUFFERED=1
 
-# FLUX or ARGOCD
-env GITOPS_OPERATOR_TYPE=FLUX
-
-# AZDO or GITHUB
-env GIT_REPOSITORY_TYPE=AZDO
-
-# Required if either Git repository or CI/CD orchestrator is Azure DevOps
-ENV AZDO_ORG_URL=
-ENV AZDO_GITOPS_REPO_NAME=
-
-ENV PAT=
-ENV GITOPS_APP_URL=
 
 RUN pip install --no-cache-dir -r ./requirements.txt
 
