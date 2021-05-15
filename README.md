@@ -31,5 +31,3 @@ The GitOps Connector supports the following Git repositories:
 ## Installation
 
 ## Contribution
-
-See how Azure DevOps GitOps Connector is involved in the overall GitOps process in [GitOps with Azure DevOps and ArgoCD/Flux](../docs/azdo-gitops.md)
