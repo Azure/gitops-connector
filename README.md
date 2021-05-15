@@ -1,4 +1,6 @@
 ![build](https://github.com/kaizentm/gitops-connector/actions/workflows/ci.yaml/badge.svg)
+![deploy](https://github.com/kaizentm/gitops-connector/actions/workflows/cd.yaml/badge.svg)
+![publish](https://github.com/kaizentm/gitops-connector/actions/workflows/publish.yaml/badge.svg)
 
 # GitOps Connector
 
