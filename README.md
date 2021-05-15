@@ -16,21 +16,20 @@ The GitOps Connector supports the following Git Ops operators:
 - [FluxCD](https://fluxcd.io)
 - [ArgoCD](https://argoproj.github.io/argo-cd/)
 
-## Git Commit Status Update 
+## Git Commit Status Update
 
 The GitOps Connector supports the following Git repositories:
 - [Azure Repos](https://azure.microsoft.com/services/devops/repos/)
 - [GitHub](https://github.com)
 
 ## Notification on Deployment Completion
--
+
 ### Azure Pipelines
--
+
 ### GitHub Actions
--
 
 ## Installation
--
+
 ## Contribution
--
+
 See how Azure DevOps GitOps Connector is involved in the overall GitOps process in [GitOps with Azure DevOps and ArgoCD/Flux](../docs/azdo-gitops.md)
