@@ -24,6 +24,14 @@ The GitOps Connector supports the following Git repositories:
 - [Azure Repos](https://azure.microsoft.com/services/devops/repos/)
 - [GitHub](https://github.com)
 
+The connector reports the deplyment process updates to the Git repositories wiith the Git commit status:
+
+In addition,  
+
+TODO: update a diagram with custom subscribers
+
+Add description on what/how custom subsccriberss rceive the messages. 
+
 ## Notification on Deployment Completion
 
 ### Azure Pipelines
