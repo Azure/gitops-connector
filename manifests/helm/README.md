@@ -1,0 +1,1 @@
+GitOps connector Helm Chart template.
