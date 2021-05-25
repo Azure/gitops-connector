@@ -1,2 +1,1 @@
-**For Internal use only**
-A set of Flux resources to setup GitOps connector development environment.
+A set of Flux resources to setup GitOps connector development environment. It's supposed to be used be by the maintainers of this repository.

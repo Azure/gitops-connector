@@ -36,19 +36,6 @@ The connector reports the deployment process updates to the Git repositories wit
 |---------|-----------|
 |![](./img/gh-commit-status.png)|![](./img/azdo-commit-status.png)|
 
-<!-- <table >
-  <tr>
-    <th>Commit Status in GitHub</th>
-    <th>Commit Status in Azure Repos</th>
-  </tr>
-
-  <tr>
-    <td><image src="./img/gh-commit-status.png" ></image></td>
-    <td><image src="./img/azdo-commit-status.png" ></image></td> 
-  </tr>
-
- </table>  -->
-
 
 In addition to updating the Git commit status in Git repositories, the GitOps connector may optionally notify a list of custom subscribers with a json payload:
 
