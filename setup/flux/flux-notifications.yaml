@@ -21,5 +21,4 @@ metadata:
 spec:
   type: generic
   address: http://gitops-connector:8080/gitopsphase
-  # address: http://877b57a33eff.ngrok.io/gitopsphase
 
