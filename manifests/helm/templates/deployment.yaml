@@ -12,7 +12,7 @@ data:
   AZDO_GITOPS_REPO_NAME: {{ required "Provide a value for azdoGitOpsRepoName" .Values.azdoGitOpsRepoName}}
   {{- end }}
   
-  {{- if eq .Values.ciCdOrchestratorType "AZDO"}}
+  {{- if and (eq .Values.ciCdOrchestratorType "AZDO") (.Values.azdoPrRepoName)}}
   AZDO_PR_REPO_NAME: {{ .Values.azdoPrRepoName}}
   {{- end }}
   
