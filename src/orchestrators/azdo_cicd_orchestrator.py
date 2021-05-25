@@ -11,6 +11,9 @@ MAX_TASK_TIMEOUT = 72 * 60
 TASK_CUTOFF_DURATION = timedelta(minutes=MAX_TASK_TIMEOUT)
 
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 class AzdoCicdOrchestrator(CicdOrchestratorInterface):
 
     def __init__(self, git_repository: GitRepositoryInterface):

@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 from collections import defaultdict
 import logging
 from operators.gitops_operator import GitopsOperatorInterface

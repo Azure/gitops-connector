@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 import utils
 from operators.argo_gitops_operator import ArgoGitopsOperator
 from operators.flux_gitops_operator import FluxGitopsOperator
