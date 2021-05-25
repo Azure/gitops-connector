@@ -21,7 +21,7 @@ jobs:
           dockerfile: ./src/Dockerfile
       - name: MD Linting
         uses: actionshub/markdownlint@main    
-      - name: 'woke'
+      - name: Stay woke
         uses: get-woke/woke-action@v0
         with:
           # Cause the check to fail on any broke rules
