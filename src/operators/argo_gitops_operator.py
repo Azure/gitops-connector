@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 from operators.gitops_operator import GitopsOperatorInterface
 from operators.git_commit_status import GitCommitStatus
 

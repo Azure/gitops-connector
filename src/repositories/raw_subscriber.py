@@ -1,4 +1,7 @@
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 import dataclasses
 import json
 import logging

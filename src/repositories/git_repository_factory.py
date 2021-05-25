@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 import os
 from repositories.git_repository import GitRepositoryInterface
 from repositories.azdo_git_repository import AzdoGitRepository
