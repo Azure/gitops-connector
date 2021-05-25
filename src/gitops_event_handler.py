@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 from flask import Flask, request
 import logging
 from timeloop import Timeloop

@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 #!/usr/bin/env bash
 
 while getopts "s:d:r:b:i:t:e:p:" option;
