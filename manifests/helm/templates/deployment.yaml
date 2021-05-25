@@ -80,7 +80,7 @@ spec:
               name: gitops-connector-cm
               key: AZDO_GITOPS_REPO_NAME
       {{- end}}              
-      {{- if eq .Values.ciCdOrchestratorType "AZDO"}}
+      {{- if and (eq .Values.ciCdOrchestratorType "AZDO") (.Values.azdoPrRepoName)}}
         - name: AZDO_PR_REPO_NAME
           valueFrom:
             configMapKeyRef:
