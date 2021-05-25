@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: gitops-connector-cm
+  name: gitops-connector-subscribers-config
 data:
   {{- range $key, $val := .Values.subscribers }}
     {{ $key }}: {{ $val | quote }}
