@@ -1,4 +1,4 @@
-rules "~MD013" # Disable long line warnings
+rules "~MD013, ~MD009" # Disable long line warnings
 rules "~MD009" # Disable Trailing spaces warnings
 rules "~MD012" # Disable Multiple consecutive blank lines warnings
 rules "~MD033" # Disable Inline HTML lines warnings
