@@ -10,7 +10,7 @@ GitOps Connector is a custom component with the goal of enriching the integratio
 
 During the reconciliation process a GitOps operator notifies on every phase change and every health check the GitOps connector. This component serves as an adapter, it "knows" how to communicate to a Git repository and it updates the Git commit status so the synchronization progress is visible in the Manifests repository. When the reconciliation including health check has successfully finished or failed the connector notifies a CI/CD orchestrator, so the CD pipelines/workflows may perform corresponding actions such as testing, post-deployment activities and moving on to the next stage in the deployment chain.
 
-Refer to the following implementations to understand the role the GitOps Connector plays in varios GitOps flows:
+Refer to the following implementations to understand the role the GitOps Connector plays in various GitOps flows:
 
 - [GitOps with Azure DevOps and ArgoCD/Flux](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/azdo-gitops.md)
 - [HLD based CI/CD Pipeline with GitOps connector](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/cicd-hld-pipeline.md)
@@ -30,7 +30,7 @@ The GitOps Connector supports the following Git repositories:
 - [Azure Repos](https://azure.microsoft.com/services/devops/repos/)
 - [GitHub](https://github.com)
 
-The connector reports the deplyment process updates to the Git repositories with the Git commit status:
+The connector reports the deployment process updates to the Git repositories with the Git commit status:
 
 <table >
   <tr>
@@ -58,18 +58,18 @@ In addition to updating the Git commit status, the GitOps connector notifies a l
 |genre| Message category | GitSource |
 
 
-Refer to [intalation guide](#installation) for the details on configuring a list of subscribers. 
+Refer to [installation guide](#installation) for the details on configuring a list of subscribers. 
 
 
 ## Notification on Deployment Completion
-The GitOps connector ananlyzes the incoming from the GitOps operator messages and figures out when the deployment is finished, succesfully or not. It notifies on this event the CI/CD orchstrator, so the orchestrator can proceed with the CD process.
+The GitOps connector analyzes the incoming from the GitOps operator messages and figures out when the deployment is finished, successfully or not. It notifies on this event the CI/CD orchestrator, so the orchestrator can proceed with the CD process.
 
-The notifiication mechanism on deployment completion varies for different CI/CD orchestrators.
+The notification mechanism on deployment completion varies for different CI/CD orchestrators.
 
 ### Azure Pipelines
 
 An Azure CD pipeline is supposed to create a PR to the manifests repo and wait in agentless mode until the PR is merged and the GitOps operator finishes the deployment. It may use PR properties as a storage for the agentless task callback parameters. 
-When the deployment is finished, the GitOps conector seeks the PR to the manifest repo that caused the deployment and looks for the PR's properties under the **/callback-task-id** path. It expects to find a json object with the following data: 
+When the deployment is finished, the GitOps connector seeks the PR to the manifest repo that caused the deployment and looks for the PR's properties under the **/callback-task-id** path. It expects to find a json object with the following data: 
 
 ```
 {"taskid":"$(System.TaskInstanceId)",
@@ -95,7 +95,7 @@ Refer to [a sample of such agentless task](https://github.com/kaizentm/cloud-nat
 
 ### GitHub Actions
 
-If the CI/CD orchestrator is GitHub Actions, the GitOps connector sends a [**dispatch** event](https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event) on the successfull deployment completion:
+If the CI/CD orchestrator is GitHub Actions, the GitOps connector sends a [**dispatch** event](https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event) on the successful deployment completion:
 
 ```
 POST /repos/{owner}/{repo}/dispatches
@@ -108,7 +108,7 @@ payload = {
 
 If the deployment fails, the connector doesn't send a dispatch event to GitHub Actions.
 
-For the implementation details refer to [the CD workflow in this repo](.github/workflows/cd.yaml) that consumes CI artfacts, generates manifests and issues a PR to the manifests repo. Also, look at [the **publish** workflow](.github/workflows/publish.yaml) which is triggered on the deployment completion by the **dispatch** event from the GitOps connector. 
+For the implementation details refer to [the CD workflow in this repo](.github/workflows/cd.yaml) that consumes CI artifacts, generates manifests and issues a PR to the manifests repo. Also, look at [the **publish** workflow](.github/workflows/publish.yaml) which is triggered on the deployment completion by the **dispatch** event from the GitOps connector. 
 
 
 ## Installation
@@ -121,7 +121,7 @@ Add **kaizentm** repository to Helm repos:
 helm repo add kaizentm https://kaizentm.github.io/charts/
 ```
 
-Prepare **values.yaml** file with the following attribues:
+Prepare **values.yaml** file with the following attributes:
 
 |Attribute|Description|Sample|
 |---------|-----------|------|
@@ -129,7 +129,7 @@ Prepare **values.yaml** file with the following attribues:
 |ciCdOrchestratorType| CI/CD Orchestrator Type (**AZDO** or **GITHUB**)| GITHUB |
 |gitOpsOperatorType| GitOps Operator Type (**FLUX** or **ARGOCD**)| FLUX |
 |gitOpsAppURL| Call back url from the Commit Status Window| https://github.com/kaizentm/gitops-manifests/commit; https://github.com/microsoft/spektate|
-|orchestratorPAT| GitHiub or Azure DevOps personal access token |
+|orchestratorPAT| GitHub or Azure DevOps personal access token |
 
 If Git Repository Type is AZDO:
 
@@ -143,7 +143,7 @@ If CI/CD Orchestrator Type is AZDO:
 |Attribute|Description|Sample|
 |---------|-----------|------|
 |azdoOrgUrl| Azure DevOps Organization URL| https://dev.azure.com/DataCommons/ProjectDataCommons |
-|azdoPrRepoName| Optional. When PRs are not isssued to the manifests repo, but to a [sperate HLD repo](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/cicd-hld-pipeline.md)  | gen3-hld |
+|azdoPrRepoName| Optional. When PRs are not issued to the manifests repo, but to a [separate HLD repo](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/cicd-hld-pipeline.md)  | gen3-hld |
 
 
 If Git Repository Type is GitHub:
@@ -209,7 +209,7 @@ kubectl logs -l=app=gitops-connector -n <NAMESPACE> -f
 
 ```
 
-### Configure FuxCD to send notifications to GitOps connector
+### Configure FluxCD to send notifications to GitOps connector
 
 [FluxCD Notification Controller](https://fluxcd.io/docs/components/notification/) sends notifications to GitOps connector on events related to **GitRepository** and **Kustomization** Flux resources. Apply the following yaml to the cluster to subscribe GitOps connector instance on Flux notifications: 
 
