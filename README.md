@@ -39,8 +39,8 @@ The connector reports the deployment process updates to the Git repositories wit
   </tr>
 
   <tr>
-    <td><image src="./img/gh-commit-status.png" height="180px"></image></td>
-    <td><image src="./img/azdo-commit-status.png"  height="180px"></image></td> 
+    <td><image src="./img/gh-commit-status.png" ></image></td>
+    <td><image src="./img/azdo-commit-status.png" ></image></td> 
   </tr>
 
  </table> 
