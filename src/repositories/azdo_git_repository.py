@@ -32,7 +32,7 @@ class AzdoGitRepository(GitRepositoryInterface):
         data = {
             'state': azdo_status,
             'description': commit_status.status_name + ": " + commit_status.message,
-            'targetUrl': commit_status.callback_url + "/" + commit_status.commit_id,
+            'targetUrl': commit_status.callback_url + "?noop=" + commit_status.status_name,
             # Shows up as "genre/name" underneath the message and status.
             'context': {
                 'name': commit_status.status_name,
