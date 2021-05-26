@@ -187,9 +187,9 @@ A sample **values.yaml** file for Flux and Azure DevOps might look like this one
 gitRepositoryType: AZDO          
 ciCdOrchestratorType: AZDO
 gitOpsOperatorType: FLUX
-azdoGitOpsRepoName: gen3-manifest
-azdoOrgUrl: https://dev.azure.com/DataCommons/ProjectDataCommons
-azdoPrRepoName: gen3-hld
+azdoGitOpsRepoName: manifest-repo
+azdoOrgUrl: https://dev.azure.com/MyOrg/MyProject
+azdoPrRepoName: hld-repo
 gitOpsAppURL: https://github.com/microsoft/spektate
 orchestratorPAT: <PAT>
 subscribers:
