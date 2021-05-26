@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 import logging
 import requests
 from datetime import datetime, timedelta
@@ -10,9 +13,6 @@ from clients.azdo_client import AzdoClient
 MAX_TASK_TIMEOUT = 72 * 60
 TASK_CUTOFF_DURATION = timedelta(minutes=MAX_TASK_TIMEOUT)
 
-
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
 
 class AzdoCicdOrchestrator(CicdOrchestratorInterface):
 

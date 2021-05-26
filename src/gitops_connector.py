@@ -55,19 +55,27 @@ class GitopsConnector:
     # in the order of the request received time.
     def drain_commit_status_queue(self):
         while (True):
-            # Blocking get
-            commit_status = self._global_message_queue.get()
+            try:
+                # Blocking get
+                commit_status = self._global_message_queue.get()
 
-            if not commit_status:
-                break
+                if not commit_status:
+                    break
 
-            # Queue entry is (received time, commit_status)
-            commit_status = commit_status[1]
+                # Queue entry is (received time, commit_status)
+                commit_status = commit_status[1]
 
-            self._git_repository.post_commit_status(commit_status)
+                # Handling an exception as it crashes the draining thread
+                try:
+                    self._git_repository.post_commit_status(commit_status)
 
-            for subscriber in self._raw_subscribers:
-                subscriber.post_commit_status(commit_status)
+                    for subscriber in self._raw_subscribers:
+                        subscriber.post_commit_status(commit_status)
+                except Exception as e:
+                    logging.error(f'Failed to update GitCommit Status: {e}')
+
+            except Exception as e:
+                logging.error(f'Unexpected exception in the message queue draining thread: {e}')
 
 
 if __name__ == "__main__":
