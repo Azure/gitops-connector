@@ -1,1 +1,3 @@
-rules "~MD013" # Disable long line warnings
+rules "~MD013, ~MD009, ~MD012, ~MD033, ~MD034" # Disable "long line",  "Trailing spaces", "Multiple consecutive blank lines", "Multiple consecutive blank lines", "Bare URL used"  warnings
+
+
