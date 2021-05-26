@@ -166,7 +166,7 @@ Optional. If there are custom Git Commit status subscribers:
 |subscribers| List of key:value pairs defining subscriber name and endpoint | subscribers:<br>&emsp;spektate: 'http://spektate-server:5000/api/flux'
 
 
-A sample **values.yaml** file might look like this one:
+A sample **values.yaml** file for Flux and GitHub might look like this one:
 
 ```
 gitRepositoryType: GITHUB          
@@ -176,6 +176,21 @@ gitHubGitOpsRepoName: gitops-connector
 gitHubGitOpsManifestsRepoName: gitops-manifests
 gitHubOrgUrl: https://api.github.com/repos/kaizentm
 gitOpsAppURL: https://github.com/kaizentm/gitops-manifests/commit
+orchestratorPAT: <PAT>
+subscribers:
+    spektate: 'http://spektate-server:5000/api/flux'
+```
+
+A sample **values.yaml** file for Flux and Azure DevOps might look like this one:
+
+```
+gitRepositoryType: AZDO          
+ciCdOrchestratorType: AZDO
+gitOpsOperatorType: FLUX
+azdoGitOpsRepoName: manifest-repo
+azdoOrgUrl: https://dev.azure.com/MyOrg/MyProject
+azdoPrRepoName: hld-repo
+gitOpsAppURL: https://github.com/microsoft/spektate
 orchestratorPAT: <PAT>
 subscribers:
     spektate: 'http://spektate-server:5000/api/flux'
