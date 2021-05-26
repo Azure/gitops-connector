@@ -7,8 +7,8 @@ from operators.gitops_operator import GitopsOperatorInterface
 from operators.git_commit_status import GitCommitStatus
 
 KUSTOMIZATION_PHASE = "Kustomization"
-PROGRESSING_SATE = "Progressing"
-HEALTH_CHECK_FAILED_SATE = "HealthCheckFailed"
+PROGRESSING_STATE = "Progressing"
+HEALTH_CHECK_FAILED_STATE = "HealthCheckFailed"
 
 
 class FluxGitopsOperator(GitopsOperatorInterface):
@@ -24,13 +24,6 @@ class FluxGitopsOperator(GitopsOperatorInterface):
             phase_data['message'])
         kind = self._get_message_kind(phase_data)
 
-        # For Kustomization we have more detailed data to parse in addition to status.
-        if self._get_message_kind(phase_data) == KUSTOMIZATION_PHASE:
-            if phase_data['reason'] == PROGRESSING_SATE:
-                self._add_progression_summary(phase_data, commit_id, commit_statuses, kind)
-            elif phase_data['reason'] == HEALTH_CHECK_FAILED_SATE:
-                self._add_health_check_summary(phase_data, commit_id, commit_statuses, reason_message, kind)
-
         # Generic status message regardless of kind.
         status = self._new_git_commit_status(
             commit_id=commit_id,
@@ -39,6 +32,22 @@ class FluxGitopsOperator(GitopsOperatorInterface):
             message=reason_message,
             kind=kind)
         commit_statuses.append(status)
+
+        # For Kustomization we have more detailed data to parse in addition to status.
+        if self._get_message_kind(phase_data) == KUSTOMIZATION_PHASE:
+            if phase_data['reason'] == PROGRESSING_STATE:
+                self._add_progression_summary(phase_data, commit_id, commit_statuses, kind)
+                # For Progressive state adding a generic message again so the overall Status will be "pending"
+                # (Bug in AzDO)
+                status = self._new_git_commit_status(
+                    commit_id=commit_id,
+                    status_name='Status',
+                    state=reason_state,
+                    message=reason_message,
+                    kind=kind)
+                commit_statuses.append(status)
+            elif phase_data['reason'] == HEALTH_CHECK_FAILED_STATE:
+                self._add_health_check_summary(phase_data, commit_id, commit_statuses, reason_message, kind)
 
         return commit_statuses
 
@@ -64,7 +73,7 @@ class FluxGitopsOperator(GitopsOperatorInterface):
                 status = self._new_git_commit_status(
                     commit_id=commit_id,
                     status_name=resource_name,
-                    state=HEALTH_CHECK_FAILED_SATE,
+                    state=HEALTH_CHECK_FAILED_STATE,
                     message=reason_message,
                     kind=kind)
                 commit_statuses.append(status)
