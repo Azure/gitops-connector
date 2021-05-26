@@ -65,8 +65,8 @@ class GitopsConnector:
                 # Queue entry is (received time, commit_status)
                 commit_status = commit_status[1]
 
-                # Handling an exception as it crashes the draining thread 
-                try:                
+                # Handling an exception as it crashes the draining thread
+                try:
                     self._git_repository.post_commit_status(commit_status)
 
                     for subscriber in self._raw_subscribers:
