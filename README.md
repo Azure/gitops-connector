@@ -16,6 +16,27 @@ Refer to the following implementations to understand the role the GitOps Connect
 - [HLD based CI/CD Pipeline with GitOps connector](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/cicd-hld-pipeline.md)
 - [GitOps with GitHub and Flux v2](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/azdo-gitops-githubfluxv2.md)
 
+## Motivation
+
+One of the biggest challenges in GitOps is observability. When a CI/CD pipeline orchestrates the deployment process by manipulating manifests in the repository, the real deployment is handled by a GitOps operator. When it happens, how it goes and when it finishes, successfully or not, we don't know. Neither does the CI/CD pipeline. To build a multistage CD pipeline there must be a backward connection from a GitOps operator to CI/CD orchestrator that reports the deployment state/result so the CD pipeline can proceed with testing, notifying, deploying to next environment.
+
+Partly this challenge can be addressed by leveraging notifications components of GitOps operators such as [FluxCD Notification Controller](https://fluxcd.io/docs/components/notification/) and [ArgoCD Notifications](https://argocd-notifications.readthedocs.io/en/stable/). It's possible to configure basic notifications from Flux/ArgoCD to Azure DevOps/GitHub so the deployment phases are reflected with the Git Commit status in the repo. 
+
+### So why cannot we "just" use the existing notification functionality of Argo/Flux events?
+
+The thing is that "basic" is not enough. 
+
+What we need:
+  - A CD pipeline (e.g. Azure Pipeline) creates a PR to the manifests repo (e.g. GitHub) and waits until it's merged and deployment is finished. When the deployment is finished we need to find out which PR caused this deployment and invoke an Azure Pipelines API to notify a corresponding pipeline run to resume or fail.
+  - In Git Commit status we want to see more details on what resources have been applied and what resources didn't pass the health check.
+
+We can't do what we need just by configuring notifications in FluxCD/ArgoCD. To implement the logic of what we need we want to write some code and run it somewhere. We need some freedom in getting out of the boundaries of what is "out-of-the-box" in FluxCD/ArgoCD and extending it with custom logic to build a comprehensive CD flow with Azure Pipelines and/or GitHub actions. At the same time we want to keep pipelines simple and not dependent on underlying GitOps operator. Hence, the GitOps connector.
+
+### Why cannot we enhance ArgoCD/FluxCD notification functionality to achieve the same?  
+
+Actually we can. But should we? The GitOps connector decouples ArgoCD/FluxCD from GitHub/Azure DevOps. It reduces dependencies serving as a glue between them. 
+Think of GitOps connector as of an extension of FluxCD/ArgoCD (one for both) for Microsoft/GitHub products and maintained by Microsoft. When we want to build same CI/CD flow with another GitOPs operator, we will update the connector keeping the same pipelines setup. When we want to enrich look-n-feel of Git Commit status or use a new feature in Azure DevOps / GitHub we will update the connector without touching FluxCD/ArgoCD at all. Hence, the GitOps connector. 
+
 ## GitOps operators
 
 The GitOps Connector supports the following Git Ops operators:
