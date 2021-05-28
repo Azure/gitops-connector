@@ -35,7 +35,7 @@ We can't do what we need just by configuring notifications in FluxCD/ArgoCD. To 
 ### Why cannot we enhance ArgoCD/FluxCD notification functionality to achieve the same?  
 
 Actually we can. But should we? The GitOps connector decouples ArgoCD/FluxCD from GitHub/Azure DevOps. It reduces dependencies serving as a glue between them. 
-Think of GitOps connector as of an extension of FluxCD/ArgoCD (one for both) for Microsoft/GitHub products and maintained by Microsoft. When we want to build same CI/CD flow with another GitOPs operator, we will update the connector keeping the same pipelines setup. When we want to enrich look-n-feel of Git Commit status or use a new feature in Azure DevOps / GitHub we will update the connector without touching FluxCD/ArgoCD at all. Hence, the GitOps connector. 
+Think of GitOps connector as of an extension of FluxCD/ArgoCD (one for both) for Microsoft/GitHub products and maintained by Microsoft. When we want to build same CI/CD flow with another GitOps operator, we will update the connector keeping the same pipelines setup. When we want to enrich look-n-feel of Git Commit status or use a new feature in Azure DevOps / GitHub we will update the connector without touching FluxCD/ArgoCD at all. Hence, the GitOps connector. 
 
 ## GitOps operators
 
