@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - eedorenko/update-home
 
 jobs:
   code_quality_checks:
@@ -50,7 +51,7 @@ jobs:
         with:
           push: true
           context: ./src
-          tags: kaizentm/gitops-connector:${{ env.IMAGE_TAG }}, kaizentm/gitops-connector:latest         
+          tags: ghcr.io/azure/gitops-connector:${{ env.IMAGE_TAG }}, ghcr.io/azure/gitops-connector:latest         
       - name: Upload Image Tags
         uses: actions/upload-artifact@v2.2.2
         with:
