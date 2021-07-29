@@ -3,7 +3,7 @@ entries:
   gitops-connector:
   - apiVersion: v2
     appVersion: 1.0.1-89
-    created: "2021-07-29T23:27:52.648244595Z"
+    created: "2021-07-29T16:40:34.50602-07:00"
     description: A Helm chart for GitOps connector
     digest: 8a9bd3ac6414345bdf7ec16354787d4d5df2c6caad8a0a3ec02535ee44630056
     name: gitops-connector
@@ -11,4 +11,14 @@ entries:
     urls:
     - https://azure.github.io/gitops-connector/gitops-connector-1.0.1-89.tgz
     version: 1.0.1-89
-generated: "2021-07-29T23:27:52.647701477Z"
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2021-07-29T16:40:34.505535-07:00"
+    description: A Helm chart for GitOps connector
+    digest: 6f48603dc3a95dacdf2ee620d23ee65c6e6a3b1b88d11456bba90ef4a18a0acf
+    name: gitops-connector
+    type: application
+    urls:
+    - https://azure.github.io/gitops-connector/gitops-connector-1.0.0.tgz
+    version: 1.0.0
+generated: "2021-07-29T16:40:34.504778-07:00"
