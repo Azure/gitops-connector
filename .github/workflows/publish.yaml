@@ -1,8 +1,13 @@
 name: Publish
  
 on:
-  repository_dispatch:
-    types: [sync-success]
+  # repository_dispatch:
+  #   types: [sync-success]
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main, eedorenko/update-home]
+    types: 
+      - completed
 
 jobs:
   update_helm_chart:
@@ -17,14 +22,16 @@ jobs:
       with:
         name: image_tags
         workflow: ci.yml
-        run_id: ${{ github.event.client_payload.runid }}
+        # run_id: ${{ github.event.client_payload.runid }}
+        run_id: ${{ github.event.workflow_run.id }}        
         path: ${{ github.workspace }}
     - name: Download Manifests
       uses: dawidd6/action-download-artifact@v2
       with:
         name: manifests
         workflow: ci.yml
-        run_id: ${{ github.event.client_payload.runid }}
+        # run_id: ${{ github.event.client_payload.runid }}
+        run_id: ${{ github.event.workflow_run.id }}        
         path: ${{ github.workspace }}
     - name: Read Image Tags
       run: |
