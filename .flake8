@@ -1,5 +1,0 @@
-[flake8]
-ignore =
-    E128, # Continuation line under-indented for visual indent
-    E501, # Long lines
-    W504  # Line break after binary operator

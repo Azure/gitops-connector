@@ -1,1 +1,0 @@
-GitOps Connector source code.
