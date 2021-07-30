@@ -1,4 +1,4 @@
-imageName: kaizentm/gitops-connector
+imageName: ghcr.io/azure/gitops-connector
 imageTag: $IMAGE_TAG
 containerPort: 8080
 

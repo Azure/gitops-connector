@@ -1,6 +1,6 @@
-![build](https://github.com/kaizentm/gitops-connector/actions/workflows/ci.yaml/badge.svg)
-![deploy](https://github.com/kaizentm/gitops-connector/actions/workflows/cd.yaml/badge.svg)
-![publish](https://github.com/kaizentm/gitops-connector/actions/workflows/publish.yaml/badge.svg)
+![build](https://github.com/azure/gitops-connector/actions/workflows/ci.yaml/badge.svg)
+![deploy](https://github.com/azure/gitops-connector/actions/workflows/cd.yaml/badge.svg)
+![publish](https://github.com/azure/gitops-connector/actions/workflows/publish.yaml/badge.svg)
 
 # GitOps Connector
 
@@ -12,9 +12,9 @@ During the reconciliation process a GitOps operator notifies on every phase chan
 
 Refer to the following implementations to understand the role the GitOps Connector plays in various GitOps flows:
 
-- [GitOps with Azure DevOps and ArgoCD/Flux](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/azdo-gitops.md)
-- [HLD based CI/CD Pipeline with GitOps connector](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/cicd-hld-pipeline.md)
-- [GitOps with GitHub and Flux v2](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/azdo-gitops-githubfluxv2.md)
+- [GitOps with Azure DevOps and ArgoCD/Flux](https://github.com/Azure/arc-cicd-demo-src/blob/FluxV2/docs/azdo-gitops.md)
+- [HLD based CI/CD Pipeline with GitOps connector](https://github.com/eedorenko/bedrock/blob/eedorenko/azdo-promotion-cd.md/gitops/azure-devops/CiCdHldPipeline.md)
+- [GitOps with GitHub and Flux v2](https://github.com/Azure/arc-cicd-demo-src/blob/FluxV2/docs/azdo-gitops-githubfluxv2.md)
 
 ## Motivation
 
@@ -106,7 +106,7 @@ payload = {
 }
 ```
 
-Refer to [a sample of such agentless task](https://github.com/kaizentm/cloud-native-ops/blob/master/.pipelines/pr-completion-task-template.yaml) for the implementation details.
+Refer to [a sample of such agentless task](https://github.com/Azure/arc-cicd-demo-src/blob/FluxV2/.pipelines/pr-completion-task-template.yaml) for the implementation details.
 
 ### GitHub Actions
 
@@ -130,10 +130,10 @@ For the implementation details refer to [the CD workflow in this repo](.github/w
 
 ### Install GitOps Connector with Helm
 
-Add **kaizentm** repository to Helm repos:
+Add **GitOps Connector* repository to Helm repos:
 
 ```
-helm repo add kaizentm https://kaizentm.github.io/charts/
+helm repo add gitops-connector https://azure.github.io/gitops-connector/
 ```
 
 
@@ -160,7 +160,7 @@ If Git Repository Type is AZDO, add the following attributes:
 If CI/CD Orchestrator Type is AZDO, add the following attributes:
 |Attribute|Description|Sample|
 |---------|-----------|------|
-|azdoPrRepoName| Optional. When PRs are not issued to the manifests repo, but to a [separate HLD repo](https://github.com/kaizentm/cloud-native-ops/blob/master/docs/cicd-hld-pipeline.md)  | gen3-hld |
+|azdoPrRepoName| Optional. When PRs are not issued to the manifests repo, but to a [separate HLD repo](https://github.com/eedorenko/bedrock/blob/eedorenko/azdo-promotion-cd.md/gitops/azure-devops/CiCdHldPipeline.md)  | gen3-hld |
 |azdoOrgUrl| Azure DevOps Organization URL| https://dev.azure.com/DataCommons/ProjectDataCommons |
 
 
@@ -220,7 +220,7 @@ subscribers:
 Install GitOps connector with the following command:
 
 ```
-helm upgrade -i gitops-connector kaizentm/gitops-connector \
+helm upgrade -i gitops-connector gitops-connector/gitops-connector \
 --namespace <NAMESPACE> \
 --values values.yaml
 

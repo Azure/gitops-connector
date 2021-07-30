@@ -1,3 +1,4 @@
+# The CD pipline should be disabled now.
 name: CD
 
 on:
