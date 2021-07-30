@@ -1,3 +1,4 @@
+# Publish a new version of a chart after each CI build
 name: Publish
  
 on:
@@ -5,7 +6,7 @@ on:
   #   types: [sync-success]
   workflow_run:
     workflows: ["CI"]
-    branches: [main, eedorenko/update-home]
+    branches: [main]
     types: 
       - completed
 
