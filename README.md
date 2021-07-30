@@ -130,7 +130,7 @@ For the implementation details refer to [the CD workflow in this repo](.github/w
 
 ### Install GitOps Connector with Helm
 
-Add **GitOps COnnector* repository to Helm repos:
+Add **GitOps Connector* repository to Helm repos:
 
 ```
 helm repo add gitops-connector https://azure.github.io/gitops-connector/
