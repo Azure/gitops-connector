@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - eedorenko/update-home
 
 jobs:
   code_quality_checks:
