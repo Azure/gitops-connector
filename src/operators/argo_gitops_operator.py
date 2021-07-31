@@ -74,10 +74,10 @@ class ArgoGitopsOperator(GitopsOperatorInterface):
         sync_count = {}
 
         for resource in resources:
-            if 'health' in resource: #  not every resource has health key
+            if 'health' in resource:  # not every resource has health key
                 health = resource['health']['status']
                 health_count[health] = health_count.get(health, 0) + 1
-            if 'status' in resource: #  not every resource has status key
+            if 'status' in resource:  # not every resource has status key
                 sync_count[resource['status']] = sync_count.get(resource['status'], 0) + 1
 
         def summarize(status_count):
@@ -91,4 +91,4 @@ class ArgoGitopsOperator(GitopsOperatorInterface):
                 status_summary += "%d/%d %s" % (count, total, status)
             return status_summary
 
-        return (summarize(health_count), summarize(sync_count))        
+        return (summarize(health_count), summarize(sync_count))
