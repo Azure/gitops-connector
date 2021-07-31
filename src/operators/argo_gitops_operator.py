@@ -62,7 +62,33 @@ class ArgoGitopsOperator(GitopsOperatorInterface):
             state=state,
             message=message,
             callback_url=self.callback_url,
-            gitops_operator='ArgoCD')
+            gitops_operator='ArgoCD',
+            genre='ArgoCD')
 
     def is_supported_message(self, phase_data) -> bool:
         return True
+
+    def _get_deployment_status_summary(self, resources):
+        total = len(resources)
+        health_count = {}
+        sync_count = {}
+
+        for resource in resources:
+            if 'health' in resource: #  not every resource has health key
+                health = resource['health']['status']
+                health_count[health] = health_count.get(health, 0) + 1
+            if 'status' in resource: #  not every resource has status key
+                sync_count[resource['status']] = sync_count.get(resource['status'], 0) + 1
+
+        def summarize(status_count):
+            status_summary = ""
+            first = True
+            for status, count in status_count.items():
+                if first is not True:
+                    status_summary += ", "
+                else:
+                    first = False
+                status_summary += "%d/%d %s" % (count, total, status)
+            return status_summary
+
+        return (summarize(health_count), summarize(sync_count))        

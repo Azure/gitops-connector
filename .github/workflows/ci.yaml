@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-      - eedorenko/update-home
+      - eedorenko/fix-argocd
 
 jobs:
   code_quality_checks:
