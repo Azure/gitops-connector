@@ -133,3 +133,7 @@ spec:
         configMap:
           name: gitops-connector-subscribers-config
 {{ end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

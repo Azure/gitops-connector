@@ -19,3 +19,10 @@ gitHubOrgUrl: $GITHUB_ORG_URL
 #subscribers:
 #  sub1: http://localhost:8080/gitopsphase
 #  sub2: http://127.0.0.1:1234/
+
+# Optional list of tolerations
+# tolerations:
+#   - key: kubernetes.azure.com/scalesetpriority
+#     operator: Equal
+#     value: spot
+#     effect: NoSchedule
