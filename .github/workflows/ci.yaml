@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - eedorenko/fix-rate-limit
+      
 
 jobs:
   code_quality_checks:
