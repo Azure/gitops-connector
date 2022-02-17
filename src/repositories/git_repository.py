@@ -29,4 +29,3 @@ class GitRepositoryInterface(ABC):
     @abstractmethod
     def is_commit_finished(self, commit_id):
         pass
-

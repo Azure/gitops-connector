@@ -131,5 +131,4 @@ class AzdoGitRepository(GitRepositoryInterface):
         return pr_num
 
     def is_commit_finished(self, commit_id):
-        return false
-
+        return False
