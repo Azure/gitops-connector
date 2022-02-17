@@ -24,7 +24,7 @@ gitops_connector = GitopsConnector()
 @application.route("/gitopsphase", methods=['POST'])
 def gitopsphase():
     # Use per process timer to stash the time we got the request
-    req_time = time.monotonic_ns()
+    # req_time = time.monotonic_ns()
 
     payload = request.get_json()
 
