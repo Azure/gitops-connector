@@ -6,7 +6,7 @@ import logging
 from timeloop import Timeloop
 from datetime import timedelta
 import atexit
-import time
+# import time
 from threading import Thread
 from gitops_connector import GitopsConnector
 
