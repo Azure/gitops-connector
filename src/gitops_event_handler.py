@@ -30,7 +30,7 @@ def gitopsphase():
 
     logging.debug(f'GitOps phase: {payload}')
 
-    # gitops_connector.process_gitops_phase(payload, req_time)
+    gitops_connector.process_gitops_phase(payload, req_time)
 
     return f'GitOps phase: {payload}', 200
 
