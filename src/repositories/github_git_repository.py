@@ -32,6 +32,20 @@ class GitHubGitRepository(GitRepositoryInterface):
         # Throw appropriate exception if request failed
         response.raise_for_status()
 
+    def is_commit_finished(self, commit_id):
+        url = f'{self.rest_api_url}/{self.gitops_repo_name}/commits/{commit_id}/status'
+
+        response = requests.get(url=url, headers=self.headers)
+        # Throw appropriate exception if request failed
+        response.raise_for_status()
+
+        responseJSON = response.json()
+        logging.info(f'Url {url}: Headers {self.headers}: Response {responseJSON}')
+
+        state = responseJSON['state']
+
+        return state == 'failure' or state == 'success'
+
     def _map_to_github_state(self, reason):
         state_map = {
             "Suspended": "error",

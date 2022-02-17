@@ -40,7 +40,8 @@ class GitopsConnector:
         is_finished, is_successful = self._gitops_operator.is_finished(phase_data)
         if is_finished:
             commit_id = self._gitops_operator.get_commit_id(phase_data)
-            self._cicd_orchestrator.notify_on_deployment_completion(commit_id, is_successful)
+            if not self._git_repository.is_commit_finished(commit_id):
+                self._cicd_orchestrator.notify_on_deployment_completion(commit_id, is_successful)
 
     # Entrypoint for the periodic task to search for abandoned PRs linked to
     # agentless tasks.
