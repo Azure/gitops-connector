@@ -4,7 +4,7 @@ name: CD
 on:
   workflow_run:
     workflows: ["CI"]
-    branches: [main, eedorenko/fix-rate-limit]
+    branches: [main]
     types: 
       - completed
 

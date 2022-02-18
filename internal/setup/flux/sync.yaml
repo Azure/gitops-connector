@@ -7,11 +7,11 @@ metadata:
 spec:
   interval: 30s
   ref:
-    branch: dev
+    branch: main
   timeout: 20s
   url: https://github.com/kaizentm/gitops-manifests
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: gitops-connector-dev
