@@ -41,7 +41,7 @@ class GitHubGitRepository(GitRepositoryInterface):
 
         responseJSON = response.json()
 
-        logging.debug(f'Url {url}: Headers {self.headers}: Response {responseJSON}')
+        # logging.debug(f'Url {url}: Headers {self.headers}: Response {responseJSON}')
 
         state = responseJSON['state']
 
