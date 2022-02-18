@@ -34,10 +34,11 @@ class GitHubCicdOrchestrator(CicdOrchestratorInterface):
         logging.info(f'CommitId {commitid}')
         return commitid, runid
 
-    def _send_repo_dispatch_event(self, commmit_id, run_id):
+    def _send_repo_dispatch_event(self, commmit_id, run_id):        
         url = f'{self.rest_api_url}/{self.gitops_repo_name}/dispatches'
         event_type = 'sync-success'
         data = {'event_type': event_type, 'client_payload': {'sha': commmit_id, 'runid': run_id}}
+        logging.info(f'Dispatch event: url {url}; data {data}')
         response = requests.post(url=url, headers=self.headers, json=data)
         # Throw appropriate exception if request failed
         response.raise_for_status()
