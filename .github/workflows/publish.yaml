@@ -2,13 +2,13 @@
 name: Publish
  
 on:
-  repository_dispatch:
-    types: [sync-success]
-  # workflow_run:
-  #   workflows: ["CI"]
-  #   branches: [main]
-  #   types: 
-  #     - completed
+  # repository_dispatch:
+  #   types: [sync-success]
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
   update_helm_chart:
@@ -18,33 +18,33 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
-    # - name: Download Image Tags
-    #   uses: dawidd6/action-download-artifact@v2
-    #   with:
-    #     name: image_tags
-    #     workflow: ci.yml
-    #     # run_id: ${{ github.event.client_payload.runid }}
-    #     run_id: ${{ github.event.workflow_run.id }}        
-    #     path: ${{ github.workspace }}
-    # - name: Download Manifests
-    #   uses: dawidd6/action-download-artifact@v2
-    #   with:
-    #     name: manifests
-    #     workflow: ci.yml
-    #     # run_id: ${{ github.event.client_payload.runid }}
-    #     run_id: ${{ github.event.workflow_run.id }}        
-    #     path: ${{ github.workspace }}
-    # - name: Read Image Tags
-    #   run: |
-    #     echo "IMAGE_TAG=$(cat ${{ github.workspace }}/IMAGE_TAG)" >> $GITHUB_ENV          
-    # - name: Generate Manifests
-    #   run: |
-    #     .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests hld_only
-    #   env:
-    #       APP_BUILD_VERSION: ${{ env.IMAGE_TAG }}
-    #       ORCHESTRATOR_PAT: ${{ secrets.ORCHESTRATOR_PAT }}
-    # - name: Publish Helm Chart
-    #   run: |
-    #     .github/workflows/utils/publish_helm_chart.sh gen_manifests/hld/helm ${{ secrets.HELM_CHARTS_REPO_NAME }} ${{ secrets.HELM_CHARTS_URL }}
-    #   env:
-    #       TOKEN: ${{ secrets.HELM_CHARTS_PAT }}
+    - name: Download Image Tags
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        name: image_tags
+        workflow: ci.yml
+        # run_id: ${{ github.event.client_payload.runid }}
+        run_id: ${{ github.event.workflow_run.id }}        
+        path: ${{ github.workspace }}
+    - name: Download Manifests
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        name: manifests
+        workflow: ci.yml
+        # run_id: ${{ github.event.client_payload.runid }}
+        run_id: ${{ github.event.workflow_run.id }}        
+        path: ${{ github.workspace }}
+    - name: Read Image Tags
+      run: |
+        echo "IMAGE_TAG=$(cat ${{ github.workspace }}/IMAGE_TAG)" >> $GITHUB_ENV          
+    - name: Generate Manifests
+      run: |
+        .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests hld_only
+      env:
+          APP_BUILD_VERSION: ${{ env.IMAGE_TAG }}
+          ORCHESTRATOR_PAT: ${{ secrets.ORCHESTRATOR_PAT }}
+    - name: Publish Helm Chart
+      run: |
+        .github/workflows/utils/publish_helm_chart.sh gen_manifests/hld/helm ${{ secrets.HELM_CHARTS_REPO_NAME }} ${{ secrets.HELM_CHARTS_URL }}
+      env:
+          TOKEN: ${{ secrets.HELM_CHARTS_PAT }}

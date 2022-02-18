@@ -26,8 +26,10 @@ class GitopsConnector:
 
     def process_gitops_phase(self, phase_data, req_time):
         if self._gitops_operator.is_supported_message(phase_data):
-            self._queue_commit_statuses(phase_data, req_time)
-            self._notify_orchestrator(phase_data)
+            commit_id = self._gitops_operator.get_commit_id(phase_data)
+            if not self._git_repository.is_commit_finished(commit_id):
+                self._queue_commit_statuses(phase_data, req_time)
+                self._notify_orchestrator(phase_data, commit_id)
         else:
             logging.debug(f'Message is not supported: {phase_data}')
 
@@ -36,10 +38,9 @@ class GitopsConnector:
         for commit_status in commit_statuses:
             self._global_message_queue.put(item=(req_time, commit_status))
 
-    def _notify_orchestrator(self, phase_data):
+    def _notify_orchestrator(self, phase_data, commit_id):
         is_finished, is_successful = self._gitops_operator.is_finished(phase_data)
         if is_finished:
-            commit_id = self._gitops_operator.get_commit_id(phase_data)
             self._cicd_orchestrator.notify_on_deployment_completion(commit_id, is_successful)
 
     # Entrypoint for the periodic task to search for abandoned PRs linked to

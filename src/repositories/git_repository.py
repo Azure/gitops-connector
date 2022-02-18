@@ -25,3 +25,7 @@ class GitRepositoryInterface(ABC):
     @abstractmethod
     def get_commit_message(self, commit_id):
         pass
+
+    @abstractmethod
+    def is_commit_finished(self, commit_id):
+        pass
