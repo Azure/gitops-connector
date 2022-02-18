@@ -40,11 +40,11 @@ class GitHubGitRepository(GitRepositoryInterface):
         response.raise_for_status()
 
         responseJSON = response.json()
-        
+
         logging.debug(f'Url {url}: Headers {self.headers}: Response {responseJSON}')
-        
+
         state = responseJSON['state']
-        
+
         logging.info(f'Commit {commit_id}: {state}')
 
         return state == 'failure' or state == 'success'
