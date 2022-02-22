@@ -2,15 +2,15 @@ apiVersion: v1
 entries:
   gitops-connector:
   - apiVersion: v2
-    appVersion: 1.0.1-115
+    appVersion: 1.1.0
     created: "2022-02-22T23:50:59.851327478Z"
     description: A Helm chart for GitOps connector
     digest: 8d319429ba0b2fa3fc6511aa493b88358bd12a1ddb055dc3afab7a802067834b
     name: gitops-connector
     type: application
     urls:
-    - https://azure.github.io/gitops-connector/gitops-connector-1.0.1-115.tgz
-    version: 1.0.1-115
+    - https://azure.github.io/gitops-connector/gitops-connector-1.1.0.tgz
+    version: 1.1.0
   - apiVersion: v2
     appVersion: 1.0.1-98
     created: "2022-02-22T23:50:59.854310478Z"
