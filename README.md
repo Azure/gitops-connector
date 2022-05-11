@@ -281,59 +281,54 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: argocd-notifications-cm
-  namespace: <NAMESPACE>
+  namespace: <ARGOCD-NAMESPACE>
 data:
-  config.yaml: |
-    triggers:
-      - name: sync-operation-failed
-        condition: app.status.operationState.phase in ['Error', 'Failed']
-        template: sync-operation-status-change
-      - name: sync-operation-succeeded
-        condition: app.status.operationState.phase in ['Succeeded']
-        template: sync-operation-status-change
-      - name: sync-operation-running
-        condition: app.status.operationState.phase in ['Running']
-        template: sync-operation-status-change
-      - name: sync-operation-progressing
-        condition: app.status.health.status in ['Progressing']
-        template: sync-operation-status-change
-      - name: sync-operation-healthy
-        condition: app.status.health.status in ['Healthy'] && app.status.operationState.phase in ['Succeeded']
-        template: sync-operation-status-change
-      - name: sync-operation-unhealthy
-        condition: app.status.health.status in ['Unknown', 'Suspended', 'Degraded', 'Missing']
-        template: sync-operation-status-change
-    templates:
-      - name: sync-operation-status-change
-        webhook:
-          test-receiver:
-            method: POST
-            body: |
-              {
-                "commitid": "{{.app.status.operationState.operation.sync.revision}}",
-                "phase": "{{.app.status.operationState.phase}}",
-                "sync_status": "{{.app.status.sync.status}}",
-                "health": "{{.app.status.health.status}}",
-                "message": "{{.app.status.operationState.message}}",
-                "resources": {{toJson .app.status.resources}}
-              }
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: argocd-notifications-secret
-  namespace: <NAMESPACE>
-stringData:
-  notifiers.yaml: |
+  trigger.sync-operation-status: |
+    - when: app.status.operationState.phase in ['Error', 'Failed']
+      send: [sync-operation-status-change]
+    - when: app.status.operationState.phase in ['Succeeded']
+      send: [sync-operation-status-change]
+    - when: app.status.operationState.phase in ['Running']
+      send: [sync-operation-status-change]
+    - when: app.status.health.status in ['Progressing']
+      send: [sync-operation-status-change]
+    - when: app.status.health.status in ['Healthy'] && app.status.operationState.phase in ['Succeeded']
+      send: [sync-operation-status-change]
+    - when: app.status.health.status in ['Unknown', 'Suspended', 'Degraded', 'Missing', 'Healthy']
+      send: [sync-operation-status-change]
+  service.webhook.gitops-connector: |
+    url: http://gitops-connector.<GITOPS-CONNECTOR-NAMESPACE>:8080/gitopsphase
+    headers:
+    - name: Content-Type
+      value: application/json
+  template.sync-operation-status-change: |
     webhook:
-    - name: test-receiver
-      url: http://gitops-connector:8080/gitopsphase
-      headers:
-      - name: Content-Type
-        value: application/json
-type: Opaque      
+      test-receiver:
+        method: POST
+        body: |
+          {
+            "commitid": "{{.app.status.operationState.operation.sync.revision}}",
+            "phase": "{{.app.status.operationState.phase}}",
+            "sync_status": "{{.app.status.sync.status}}",
+            "health": "{{.app.status.health.status}}",
+            "message": "{{.app.status.operationState.message}}",
+            "resources": {{toJson .app.status.resources}}
+          }
+  subscriptions: |
+    - recipients:
+        - test-receiver:""
+      triggers:
+        - sync-operation-status
 ```        
+OR if u want to trigger for specific argo app, instead of `subscriptions` in `argocd-notifications-cm` add annotation in argo Application manifest
 
+```
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.<trigger-name>.<webhook-name>: ""
+```
 ## Contributing
 
 This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit <https://cla.microsoft.com.>
