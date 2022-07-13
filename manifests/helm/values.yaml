@@ -26,3 +26,7 @@ gitHubOrgUrl: $GITHUB_ORG_URL
 #     operator: Equal
 #     value: spot
 #     effect: NoSchedule
+
+# Optional node selector rules
+# nodeSelector:
+#   kubernetes.io/os: linux
