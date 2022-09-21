@@ -127,7 +127,10 @@ class FluxGitopsOperator(GitopsOperatorInterface):
         kind = self._get_message_kind(phase_data)
         logging.debug(f'Kind: {kind}')
 
-        return (kind == 'Kustomization' or kind == 'GitRepository')
+        reason = phase_data['reason']
+        logging.debug(f'Reason: {reason}')
+
+        return (kind == 'Kustomization' or kind == 'GitRepository' and reason != 'NewArtifact')
 
     def _get_message_kind(self, phase_data) -> str:
         return phase_data['involvedObject']['kind']
@@ -145,7 +148,8 @@ class FluxGitopsOperator(GitopsOperatorInterface):
             "HealthCheckFailed": "Health Check Failed",
             "ValidationFailed": "Manifests validation failed.",
             "info": original_message,
-            "error": original_message
+            "error": original_message,
+            "NewArtifact": original_message
         }
         return reason_description_map[reason]
 
