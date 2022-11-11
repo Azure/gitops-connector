@@ -55,7 +55,7 @@ class GitHubGitRepository(GitRepositoryInterface):
             "ReconciliationSucceeded": "success",
             "ReconciliationFailed": "failure",
             "Progressing": "pending",
-            "DependencyNotReady": "error",
+            "DependencyNotReady": "pending",
             "PruneFailed": "failure",
             "ArtifactFailed": "failure",
             "BuildFailed": "failure",
