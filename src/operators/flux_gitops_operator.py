@@ -128,7 +128,8 @@ class FluxGitopsOperator(GitopsOperatorInterface):
         logging.debug(f'Kind: {kind}')
 
         reason = phase_data['reason']
-        logging.debug(f'Reason: {reason}')    
+        logging.debug(f'Reason: {reason}')
+
         return (kind == 'Kustomization' or kind == 'GitRepository' and reason != 'NewArtifact')
 
     def _get_message_kind(self, phase_data) -> str:
