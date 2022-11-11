@@ -129,11 +129,17 @@ class FluxGitopsOperator(GitopsOperatorInterface):
 
         reason = phase_data['reason']
         logging.debug(f'Reason: {reason}')
+        
+        commitstatus = self._get_message_commit_status(phase_data)
+        logging.debug(f'CommitStatus: {commitstatus}')
 
-        return (kind == 'Kustomization' or kind == 'GitRepository' and reason != 'NewArtifact')
+        return (kind == 'Kustomization' or kind == 'GitRepository' and reason != 'NewArtifact' and commitstatus == None)
 
     def _get_message_kind(self, phase_data) -> str:
         return phase_data['involvedObject']['kind']
+    
+    def _get_message_commit_status(self, phase_data) -> str:
+        return phase_data['involvedObject']['metadata'].get('commit_status')
 
     def _map_reason_to_description(self, reason, original_message):
         # Explicitly handle all statuses so we make sure we don't silently miss any.
