@@ -20,24 +20,27 @@ class GitHubCicdOrchestrator(CicdOrchestratorInterface):
 
     def notify_on_deployment_completion(self, commit_id, is_successful):
         if is_successful:
-            source_commit_id, run_id = self._get_source_commit_id_run_id(commit_id)
-            self._send_repo_dispatch_event(source_commit_id, run_id)
+            source_commit_id, run_id, commit_message = self._get_source_commit_id_run_id_commit_mesage(commit_id)
+            self._send_repo_dispatch_event(source_commit_id, run_id, commit_message)
 
     def notify_abandoned_pr_tasks(self):
         pass
 
-    def _get_source_commit_id_run_id(self, manifest_commitid):
+    def _get_source_commit_id_run_id_commit_mesage(self, manifest_commitid):
         commitMessage = self.git_repository.get_commit_message(manifest_commitid)
         commitMessageArray = commitMessage.split('/', 5)
-        runid = commitMessageArray[2]
-        commitid = commitMessageArray[3]
+        try:
+            runid = commitMessageArray[2]
+            commitid = commitMessageArray[3]
+        except  
+            pass
         logging.info(f'CommitId {commitid}')
-        return commitid, runid
+        return commitid, runid, commitMessage
 
-    def _send_repo_dispatch_event(self, commmit_id, run_id):
+    def _send_repo_dispatch_event(self, commmit_id, run_id, commit_message):
         url = f'{self.rest_api_url}/{self.gitops_repo_name}/dispatches'
         event_type = 'sync-success'
-        data = {'event_type': event_type, 'client_payload': {'sha': commmit_id, 'runid': run_id}}
+        data = {'event_type': event_type, 'client_payload': {'sha': commmit_id, 'runid': run_id, 'commitmessage': commit_message}}
         logging.info(f'Dispatch event: url {url}; data {data}')
         response = requests.post(url=url, headers=self.headers, json=data)
         # Throw appropriate exception if request failed
