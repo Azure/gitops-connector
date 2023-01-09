@@ -28,12 +28,10 @@ class GitHubCicdOrchestrator(CicdOrchestratorInterface):
 
     def _get_source_commit_id_run_id_commit_mesage(self, manifest_commitid):
         commitMessage = self.git_repository.get_commit_message(manifest_commitid)
-        commitMessageArray = commitMessage.split('/', 5)
-        try:
-            runid = commitMessageArray[2]
+        commitMessageArray = commitMessage.split('/')
+        runid = commitMessageArray[2]
+        if len(commitMessageArray) > 3:
             commitid = commitMessageArray[3]
-        except:
-            pass
         logging.info(f'CommitId {commitid}')
         return commitid, runid, commitMessage
 
