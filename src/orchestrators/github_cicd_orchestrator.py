@@ -32,7 +32,7 @@ class GitHubCicdOrchestrator(CicdOrchestratorInterface):
         try:
             runid = commitMessageArray[2]
             commitid = commitMessageArray[3]
-        except  
+        except:
             pass
         logging.info(f'CommitId {commitid}')
         return commitid, runid, commitMessage
