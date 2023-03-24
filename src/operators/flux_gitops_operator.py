@@ -114,11 +114,12 @@ class FluxGitopsOperator(GitopsOperatorInterface):
 
     def get_commit_id(self, phase_data) -> str:
         if self._get_message_kind(phase_data) == "Kustomization":
+            # https://github.com/fluxcd/flux2/tree/main/rfcs/0005-artifact-revision-and-digest
             revision = phase_data['metadata']['revision']
         elif self._get_message_kind(phase_data) == 'GitRepository':
             # 'Fetched revision: user/blah/githash'
             revision = phase_data['message']
-        revisionArray = revision.split('/')
+        revisionArray = revision.split(':') # Extract the commit ID from the message
         commit_id = revisionArray[-1]
 
         return commit_id
