@@ -113,15 +113,21 @@ class FluxGitopsOperator(GitopsOperatorInterface):
         return is_finished, is_successful
 
     def get_commit_id(self, phase_data) -> str:
+        revision = ''
         if self._get_message_kind(phase_data) == "Kustomization":
-            revision = phase_data['metadata']['revision']
+            if 'revision' in phase_data['metadata']:
+                revision = phase_data['metadata']['revision']
+            else:
+                revision = phase_data['metadata']['kustomize.toolkit.fluxcd.io/revision']
         elif self._get_message_kind(phase_data) == 'GitRepository':
-            # 'Fetched revision: user/blah/githash'
-            revision = phase_data['message']
-        revisionArray = revision.split('/')
-        commit_id = revisionArray[-1]
+            if 'revision' in phase_data['metadata']:
+                revision = phase_data['metadata']['revision']
+            elif 'message' in phase_data['metadata']:
+                return parse_fetch_message(phase_data['metadata']['message'])
+            else:
+                revision = phase_data['metadata']['source.toolkit.fluxcd.io/revision']
 
-        return commit_id
+        return parse_commit_id(revision)
 
     def is_supported_message(self, phase_data) -> bool:
         kind = self._get_message_kind(phase_data)
@@ -209,3 +215,22 @@ class FluxGitopsOperator(GitopsOperatorInterface):
             status_arr['Info'] = raw_message
 
         return status_arr
+
+
+# Based on the Flux source
+# https://github.com/fluxcd/pkg/blob/c7d085624bfbbf426b83e5042e5614f85aac8b36/git/utils.go#L124
+def parse_commit_id(revision):
+    if revision == "":
+        return ""
+
+    i = revision.rfind(":")
+    if i > 0:
+        return revision[i+1:]
+
+    revisionArray = revision.split('/')
+    return revisionArray[-1]
+
+
+def parse_fetch_message(message):
+    revisionArray = message.split('/')
+    return revisionArray[-1]
