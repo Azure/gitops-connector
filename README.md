@@ -12,9 +12,9 @@ During the reconciliation process a GitOps operator notifies on every phase chan
 
 Refer to the following implementations to understand the role the GitOps Connector plays in various GitOps flows:
 
-- [GitOps with Azure DevOps and ArgoCD/Flux](https://github.com/Azure/arc-cicd-demo-src/blob/FluxV2/docs/azdo-gitops.md)
+- [GitOps with Azure DevOps and ArgoCD/Flux](https://github.com/Azure/arc-cicd-demo-src/blob/master/docs/azdo-gitops.md)
 - [HLD based CI/CD Pipeline with GitOps connector](https://github.com/eedorenko/bedrock/blob/eedorenko/azdo-promotion-cd.md/gitops/azure-devops/CiCdHldPipeline.md)
-- [GitOps with GitHub and Flux v2](https://github.com/Azure/arc-cicd-demo-src/blob/FluxV2/docs/azdo-gitops-githubfluxv2.md)
+- [GitOps with GitHub and Flux v2](https://github.com/Azure/arc-cicd-demo-src/blob/master/docs/azdo-gitops-githubfluxv2.md)
 
 ## Motivation
 
