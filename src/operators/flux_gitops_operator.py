@@ -140,7 +140,7 @@ class FluxGitopsOperator(GitopsOperatorInterface):
         reason_description_map = {
             "ReconciliationSucceeded": original_message,
             "ReconciliationFailed": original_message,
-            "Progressing": "Reconcilation underway.",
+            "Progressing": "Reconciliation underway.",
             "DependencyNotReady": original_message,
             "PruneFailed": original_message,
             "ArtifactFailed": original_message,

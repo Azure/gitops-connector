@@ -116,7 +116,7 @@ If the CI/CD orchestrator is GitHub Actions, the GitOps connector sends a [dispa
 POST /repos/{owner}/{repo}/dispatches
 payload = {
     'event_type': "sync-success",
-    'client_payload': {'sha': {commmit_id},                //Commit Id in source repo that started the CI/CD process 
+    'client_payload': {'sha': {commit_id},                //Commit Id in source repo that started the CI/CD process 
                       'runid': {github_workflow_run_id}    //GitHub Actions Workflow RunId that produced artifacts (e.g. Docker Image Tags)
                       'commitmessage': {commit_message}    //Full commit message from the commit that updated the manifests. Used to pass metadata for tying back to the source repo commits if there are multiple. 
     }
