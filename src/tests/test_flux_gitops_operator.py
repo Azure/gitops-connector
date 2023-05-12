@@ -117,6 +117,7 @@ def test_get_commit_id_from_other_resource(operator):
 
     assert commit_id == ''
 
+
 @pytest.fixture
 def operator():
     return FluxGitopsOperator()

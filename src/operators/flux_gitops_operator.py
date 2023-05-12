@@ -225,7 +225,7 @@ def parse_commit_id(revision):
 
     i = revision.rfind(":")
     if i > 0:
-        return revision[i+1:]
+        return revision[i + 1:]
 
     revisionArray = revision.split('/')
     return revisionArray[-1]
