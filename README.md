@@ -321,7 +321,7 @@ data:
       triggers:
         - sync-operation-status
 ```        
-OR if u want to trigger for specific argo app, instead of `subscriptions` in `argocd-notifications-cm` add annotation in argo Application manifest
+OR if you want to trigger for specific argo app, instead of `subscriptions` in `argocd-notifications-cm` add annotation in argo Application manifest
 
 ```
 apiVersion: argoproj.io/v1alpha1
