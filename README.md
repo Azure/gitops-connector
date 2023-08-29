@@ -106,7 +106,7 @@ payload = {
 }
 ```
 
-Refer to [a sample of such agentless task](https://github.com/Azure/arc-cicd-demo-src/blob/FluxV2/.pipelines/pr-completion-task-template.yaml) for the implementation details.
+Refer to [a sample of such agentless task](https://github.com/Azure/arc-cicd-demo-src/blob/master/.pipelines/pr-completion-task-template.yaml) for the implementation details.
 
 ### GitHub Actions
 
