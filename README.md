@@ -22,7 +22,7 @@ One of the biggest challenges in GitOps is observability. When a CI/CD pipeline 
 
 Partly this challenge can be addressed by leveraging notifications components of GitOps operators such as [FluxCD Notification Controller](https://fluxcd.io/docs/components/notification/) and [ArgoCD Notifications](https://argocd-notifications.readthedocs.io/en/stable/). It's possible to configure basic notifications from Flux/ArgoCD to Azure DevOps/GitHub so the deployment phases are reflected with the Git Commit status in the repo. 
 
-#### So why cannot we "just" use the existing notification functionality of Argo/Flux events?
+#### So why can't we "just" use the existing notification functionality of Argo/Flux events?
 
 The thing is that "basic" is not enough. 
 
@@ -32,7 +32,7 @@ What we need:
 
 We simply can't do what we need just by configuring notifications in FluxCD/ArgoCD. To implement the logic of what we need we want to write some code and run it somewhere. We need some freedom in getting out of the boundaries of what is "out-of-the-box" in FluxCD/ArgoCD and extending it with custom logic to build a comprehensive CD flow with Azure Pipelines and/or GitHub actions. At the same time we want to keep pipelines simple and not dependent on underlying GitOps operator. Hence, the GitOps connector.
 
-#### Why cannot we enhance ArgoCD/FluxCD notification functionality to achieve the same?  
+#### Why can't we enhance ArgoCD/FluxCD notification functionality to achieve the same?  
 
 Actually we can. The only thing that we'd have to do that twice. And again, when we support another GitOps operator. And separately for GitHub and Azure DevOps. And again when we support another CI/CD orchestrator. So should we? The GitOps connector decouples ArgoCD/FluxCD from GitHub/Azure DevOps. It reduces dependencies serving as a glue between them. 
 Think of the GitOps connector as of an extension of FluxCD/ArgoCD (one for both) or, in terms of FluxCD notifications, a custom provider for GitHub, Azure DevOps, various observability dashboards (e.g. Spektate). A custom provider extracted as a separate microservice with an independent lifecycle. When we want to build same CI/CD flow with another GitOps operator, we will update the connector keeping the same pipelines setup. When we want to enrich look-n-feel of Git Commit status or use a new feature in Azure DevOps / GitHub or start supporting another CI/CD orchestrator we will update the connector without touching FluxCD/ArgoCD at all. Hence, the GitOps connector. 
