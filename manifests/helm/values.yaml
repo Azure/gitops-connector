@@ -1,32 +1,170 @@
-imageName: ghcr.io/azure/gitops-connector
-imageTag: $IMAGE_TAG
-containerPort: 8080
+# Default values for gitops-connector.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
 
-gitRepositoryType: $GIT_REPOSITORY_TYPE
-ciCdOrchestratorType: $CICD_ORCHESTRATOR_TYPE
-gitOpsOperatorType: $GITOPS_OPERATOR_TYPE
-gitOpsAppURL: $GITOPS_APP_URL
-azdoGitOpsRepoName: $AZDO_GITOPS_REPO_NAME
-azdoPrRepoName: $AZDO_PR_REPO_NAME
-azdoOrgUrl: $AZDO_ORG_URL
-orchestratorPAT: $ORCHESTRATOR_PAT
+### Configuration
+# -- Git Repository Type (`AZDO` or `GITHUB`)
+# @section -- Configuration
+gitRepositoryType: ""
+# -- CI/CD Orchestrator Type (`AZDO` or `GITHUB`)
+# @section -- Configuration
+ciCdOrchestratorType: ""
+# -- GitOps Operator Type (`FLUX` or `ARGOCD`)
+# @section -- Configuration
+gitOpsOperatorType: ""
+# -- Call back URL from the Commit Status Window
+# e.g. `https://github.com/kaizentm/gitops-manifests/commit; https://github.com/microsoft/spektate`
+# @section -- Configuration
+gitOpsAppURL: ""
+# -- GitHub or Azure DevOps personal access token
+# @section -- Configuration
+orchestratorPAT: ""
 
-gitHubGitOpsRepoName: $GITHUB_GITOPS_REPO_NAME
-gitHubGitOpsManifestsRepoName: $GITHUB_GITOPS_MANIFEST_REPO_NAME
-gitHubOrgUrl: $GITHUB_ORG_URL
+# -- Azure DevOps Mainifests repository name. Required if `gitRepositoryType` is `AZDO`
+# @section -- Configuration
+azdoGitOpsRepoName: ""
+# -- Azure DevOps Organization URL. Required if `gitRepositoryType` or `ciCdOrchestratorType` is `AZDO`.
+# e.g. `https://dev.azure.com/organization/project`
+# @section -- Configuration
+azdoOrgUrl: ""
+# -- If `ciCdOrchestratorType` is `AZDO` and when PRs are not issued to the manifests repo, but to a separate HLD repo. Optional.
+# @section -- Configuration
+azdoPrRepoName: ""
 
-# Optional list of subscriber endpoints to send raw JSON to
-#subscribers:
-#  sub1: http://localhost:8080/gitopsphase
-#  sub2: http://127.0.0.1:1234/
+# -- GitHub Mainifests repository name. Required if `gitRepositoryType` is `GITHUB`
+# @section -- Configuration
+gitHubGitOpsManifestsRepoName: ""
+# -- GitHub Organization URL. Required if `gitRepositoryType` or `ciCdOrchestratorType` is `GITHUB`.
+# e.g. `https://api.github.com/owner/repo`
+# @section -- Configuration
+gitHubOrgUrl: ""
+# -- GitHub Actions repository name. Required if `ciCdOrchestratorType` is `GITHUB`
+# @section -- Configuration
+gitHubGitOpsRepoName: ""
 
-# Optional list of tolerations
-# tolerations:
+# -- Optional list of subscriber endpoints to send raw JSON to
+# @section -- Configuration
+subscribers: {}
+#   sub1: http://localhost:8080/gitopsphase
+#   sub2: http://127.0.0.1:1234/
+
+# -- Partially override resource names (adds suffix)
+# @section -- Common
+nameOverride: ""
+# -- Fully override resource names
+# @section -- Common
+fullnameOverride: ""
+# -- (tpl/list) Array of extra objects to deploy with the release
+# @section -- Common
+extraObjects: []
+
+image:
+  # -- Image repository
+  # @section -- Parameters
+  repository: ghcr.io/azure/gitops-connector
+  # -- Image pull policy
+  # @section -- Parameters
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag whose default is the chart appVersion
+  # @section -- Parameters
+  tag: ""
+
+# -- Image pull secrets
+# @section -- Parameters
+imagePullSecrets: []
+
+# -- (tpl/list) Additional environment variables
+# @section -- Parameters
+env: []
+
+# -- (tpl/list) Additional environment variables from a secret or configMap
+# @section -- Parameters
+envFrom: []
+
+# -- Container Resources requests and limits
+# @section -- Parameters
+resources: {}
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
+
+# -- Container Security Context
+# @section -- Parameters
+securityContext: {}
+#   capabilities:
+#     drop:
+#     - ALL
+#   readOnlyRootFilesystem: true
+#   runAsNonRoot: true
+#   runAsUser: 1000
+
+# -- (tpl/object) Additional annotations for pod
+# @section -- Parameters
+podAnnotations: {}
+
+# -- (tpl/object) Additional labels for pod
+# @section -- Parameters
+podLabels: {}
+
+# -- Pod Security Context
+# @section -- Parameters
+podSecurityContext: {}
+#   fsGroup: 2000
+
+# -- Pod Affinity configuration
+# @section -- Parameters
+affinity: {}
+
+# -- Pod Node Selector configuration
+# @section -- Parameters
+nodeSelector: {}
+#   kubernetes.io/os: linux
+
+# -- Pod Tolerations configuration
+# @section -- Parameters
+tolerations: []
 #   - key: kubernetes.azure.com/scalesetpriority
 #     operator: Equal
 #     value: spot
 #     effect: NoSchedule
 
-# Optional node selector rules
-# nodeSelector:
-#   kubernetes.io/os: linux
+# -- (tpl/list) Additional volumes to the pod
+# @section -- Parameters
+volumes: []
+#   - name: foo
+#     secret:
+#       secretName: mysecret
+#       optional: false
+
+# -- (tpl/list) Additional volumeMounts to the container
+# @section -- Parameters
+volumeMounts: []
+#   - name: foo
+#     mountPath: "/etc/foo"
+#     readOnly: true
+
+service:
+  # -- Service type
+  # @section -- Parameters
+  type: ClusterIP
+  # -- Port to expose
+  # @section -- Parameters
+  port: 8080
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  # @section -- Parameters
+  create: true
+  # -- Specifies whether a service account token should be mounted
+  # @section -- Parameters
+  automount: false
+  # -- (tpl/object) Annotations to add to the service account
+  # @section -- Parameters
+  annotations: {}
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  # @section -- Parameters
+  name: ""
