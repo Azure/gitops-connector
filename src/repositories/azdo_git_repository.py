@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import os
+import re
 import json
 import requests
 import utils
@@ -123,12 +124,16 @@ class AzdoGitRepository(GitRepositoryInterface):
 
     def get_pr_num(self, commit_id) -> str:
         comment = self.get_commit_message(commit_id)
-        MERGED_PR = "Merged PR "
-        pr_num = None
-        if MERGED_PR in comment:
-            merged_pr_index = comment.index(MERGED_PR)
-            pr_num = comment[merged_pr_index + len(MERGED_PR): comment.index(":", merged_pr_index)]
-        return pr_num
+        # Regex pattern to match "Merged PR <number>" or "Merge pull request <number>"
+        pattern = r'Merged PR (\d+)|Merge pull request (\d+)'
+
+        match = re.search(pattern, comment)
+        if match:
+            # Group 1 is for "Merged PR", Group 2 is for "Merge pull request"
+            pr_num = match.group(1) or match.group(2)
+            return pr_num
+
+        return ""
 
     def is_commit_finished(self, commit_id):
         return False
