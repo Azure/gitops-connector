@@ -7,4 +7,4 @@ sources:
 
 # Both versions are updated automatically by the Helm chart release process
 version: 1.0.0
-appVersion: 1.0.0
+appVersion: latest
