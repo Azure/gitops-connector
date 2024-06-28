@@ -1,0 +1,10 @@
+gitRepositoryType: GITHUB
+ciCdOrchestratorType: GITHUB
+gitOpsOperatorType: FLUX
+gitHubGitOpsRepoName: gitops-connector
+gitHubGitOpsManifestsRepoName: gitops-manifests
+gitHubOrgUrl: https://api.github.com/repos/kaizentm
+gitOpsAppURL: https://github.com/kaizentm/gitops-manifests/commit
+subscribers:
+  local: http://localhost:8080/gitopsphase
+  spektate: "http://spektate-server:5000/api/flux"

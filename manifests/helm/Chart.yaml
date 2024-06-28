@@ -1,10 +1,10 @@
 apiVersion: v2
 name: gitops-connector
-description: A Helm chart for GitOps connector
-
+description: GitOps Connector integrates a GitOps operator with CI/CD orchestrator
 type: application
+sources:
+  - https://github.com/azure/gitops-connector
 
-version: $APP_BUILD_VERSION
-
-appVersion: $APP_BUILD_VERSION
-
+# Both versions are updated automatically by the Helm chart release process
+version: 1.0.0
+appVersion: latest

@@ -1,50 +1,108 @@
-# Publish a new version of a chart after each CI build
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# Publish a new version of a chart and image after each push to main or a tag
 name: Publish
- 
+
 on:
-  # repository_dispatch:
-  #   types: [sync-success]
-  workflow_run:
-    workflows: ["CI"]
+  push:
     branches: [main]
-    types: 
-      - completed
+    tags: ["*"]
+  # Allow PR to trigger the workflow, but skips pushing artifacts
+  workflow_call:
 
 jobs:
-  update_helm_chart:
-    name: "Update Helm Chart"
-    environment: prod
+  image:
+    name: Docker Image
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+    permissions:
+      contents: read
+      packages: write
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2.3.4
-    - name: Download Image Tags
-      uses: dawidd6/action-download-artifact@v2
-      with:
-        name: image_tags
-        workflow: ci.yml
-        # run_id: ${{ github.event.client_payload.runid }}
-        run_id: ${{ github.event.workflow_run.id }}        
-        path: ${{ github.workspace }}
-    - name: Download Manifests
-      uses: dawidd6/action-download-artifact@v2
-      with:
-        name: manifests
-        workflow: ci.yml
-        # run_id: ${{ github.event.client_payload.runid }}
-        run_id: ${{ github.event.workflow_run.id }}        
-        path: ${{ github.workspace }}
-    - name: Read Image Tags
-      run: |
-        echo "IMAGE_TAG=$(cat ${{ github.workspace }}/IMAGE_TAG)" >> $GITHUB_ENV          
-    - name: Generate Manifests
-      run: |
-        .github/workflows/utils/generate-manifests.sh ${{ github.workspace }}/manifests gen_manifests hld_only
-      env:
-          APP_BUILD_VERSION: ${{ env.IMAGE_TAG }}
-          ORCHESTRATOR_PAT: ${{ secrets.ORCHESTRATOR_PAT }}
-    - name: Publish Helm Chart
-      run: |
-        .github/workflows/utils/publish_helm_chart.sh gen_manifests/hld/helm ${{ secrets.HELM_CHARTS_REPO_NAME }} ${{ secrets.HELM_CHARTS_URL }}
-      env:
-          TOKEN: ${{ secrets.HELM_CHARTS_PAT }}
+      - uses: actions/checkout@v4
+      - uses: reecetech/version-increment@2024.4.3
+        id: version
+        with:
+          scheme: conventional_commits
+          release_branch: tags # Outputs pre-release versions on non-tag runs
+      - uses: docker/login-action@v3
+        if: ${{ github.event_name == 'push' }}
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ghcr.io/azure/gitops-connector
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ steps.version.outputs.version }},enable=${{ !startsWith(github.ref, 'refs/tags/') }}
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name == 'push' }}
+          context: ./src
+          platforms: linux/amd64,linux/arm64
+          annotations: ${{ steps.meta.outputs.annotations }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Package chart
+        run: helm package ./manifests/helm --app-version ${{ steps.meta.outputs.version }} --version ${{ steps.meta.outputs.version }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chart
+          path: |
+            gitops-connector-${{ steps.meta.outputs.version }}.tgz
+            manifests/helm/README.md
+
+  chart:
+    name: Helm Chart
+    needs: [image]
+    runs-on: ubuntu-latest
+    # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+    # However, do NOT cancel in-progress runs to allow deployments to complete.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    env:
+      version: ${{ needs.image.outputs.version }}
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+      - uses: actions/download-artifact@v4
+        with:
+          name: chart
+          path: ${{ runner.temp }}/chart
+      - name: Update helm repo index
+        run: |
+          helm repo index ${{ runner.temp }}/chart --merge index.yaml --url ${{ secrets.HELM_CHARTS_URL }}
+          cp -v ${{ runner.temp }}/chart/gitops-connector-${{ env.version }}.tgz* .
+          cp -v ${{ runner.temp }}/chart/index.yaml .
+          cp -v ${{ runner.temp }}/chart/manifests/helm/README.md .
+          git ls-files -om --exclude-standard
+      - name: Push updates
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          git config --global user.email "agent@gitops.com"
+          git config --global user.name "Git Ops"
+          git add index.yaml gitops-connector-${{ env.version }}.tgz
+          git commit -m "Add chart version ${{ env.version }}"
+          git push
+      - uses: docker/login-action@v3
+        if: ${{ github.event_name == 'push' }}
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push chart to ghcr.io
+        if: ${{ github.event_name == 'push' }}
+        run: helm push gitops-connector-${{ env.version }}.tgz oci://ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/charts
+        working-directory: ${{ runner.temp }}
