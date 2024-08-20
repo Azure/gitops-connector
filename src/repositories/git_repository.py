@@ -29,3 +29,7 @@ class GitRepositoryInterface(ABC):
     @abstractmethod
     def is_commit_finished(self, commit_id):
         pass
+
+    @abstractmethod
+    def set_git_repository(self, repo_name) -> str:
+        pass

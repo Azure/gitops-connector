@@ -25,3 +25,8 @@ class GitopsOperatorInterface(ABC):
     @abstractmethod
     def is_supported_message(self, phase_data) -> bool:
         pass
+
+    @abstractmethod
+    def get_repo_name(self, phase_data) -> str:
+        pass
+

@@ -120,3 +120,9 @@ class AzdoCicdOrchestrator(CicdOrchestratorInterface):
             # update_pr_task returns True if the task was updated.
             return not self._update_pr_task(False, str(pr_num), is_alive=False)
         return True
+
+    def set_git_repository(self, repo_name):
+        self.gitops_repo_name = repo_name
+        self.github_client = AzdoClient()
+        self.headers = self.azdo_client.get_rest_api_headers()
+        return None

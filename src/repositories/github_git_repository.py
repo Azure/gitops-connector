@@ -101,3 +101,11 @@ class GitHubGitRepository(GitRepositoryInterface):
 
     def get_prs(self, pr_status):
         pass
+
+    def set_git_repository(self, repo_name) -> str:
+        self.gitops_repo_name = repo_name
+        self.github_client = GitHubClient()
+        self.headers = self.github_client.get_rest_api_headers()
+        self.rest_api_url = self.github_client.get_rest_api_url()
+        app_url = f'{self.github_client.get_rest_api_url()}/{self.pr_repo_name}'
+        return app_url

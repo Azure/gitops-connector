@@ -132,3 +132,13 @@ class AzdoGitRepository(GitRepositoryInterface):
 
     def is_commit_finished(self, commit_id):
         return False
+
+    def set_git_repository(self, repo_name) -> str:
+        self.gitops_repo_name = repo_name
+        self.pr_repo_name = repo_name
+        self.azdo_client = AzdoClient()
+        self.headers = self.azdo_client.get_rest_api_headers()
+        self.repository_api = f'{self.azdo_client.get_rest_api_url()}/_apis/git/repositories/{self.gitops_repo_name}'
+        self.pr_repository_api = f'{self.azdo_client.get_rest_api_url()}/_apis/git/repositories/{self.pr_repo_name}'
+        app_url = f'{self.azdo_client.get_rest_api_url()}/{self.pr_repo_name}'
+        return app_url

@@ -50,6 +50,9 @@ class ArgoGitopsOperator(GitopsOperatorInterface):
 
         return is_finished, is_successful
 
+    def get_repo_name(self, phase_data) -> str:
+        return ""
+
     def get_commit_id(self, phase_data) -> str:
         return phase_data['commitid']
 

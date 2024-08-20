@@ -9,7 +9,6 @@ from repositories.git_repository_factory import GitRepositoryFactory
 from repositories.raw_subscriber import RawSubscriberFactory
 from orchestrators.cicd_orchestrator_factory import CicdOrchestratorFactory
 
-
 # Instance is shared across threads.
 class GitopsConnector:
 
@@ -26,6 +25,11 @@ class GitopsConnector:
 
     def process_gitops_phase(self, phase_data, req_time):
         if self._gitops_operator.is_supported_message(phase_data):
+            repo_n = self._gitops_operator.get_repo_name(phase_data)
+            logging.debug(f'azdoPrRepoName: {repo_n}')
+            if repo_n != '':
+                self._gitops_operator.callback_url = self._git_repository.set_git_repository(repo_n)
+                self._cicd_orchestrator.set_git_repository(repo_n)
             commit_id = self._gitops_operator.get_commit_id(phase_data)
             if not self._git_repository.is_commit_finished(commit_id):
                 self._queue_commit_statuses(phase_data, req_time)

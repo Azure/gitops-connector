@@ -43,3 +43,10 @@ class GitHubCicdOrchestrator(CicdOrchestratorInterface):
         response = requests.post(url=url, headers=self.headers, json=data)
         # Throw appropriate exception if request failed
         response.raise_for_status()
+
+    def set_git_repository(self, repo_name):
+        self.gitops_repo_name = repo_name
+        self.github_client = GitHubClient()
+        self.headers = self.github_client.get_rest_api_headers()
+        self.rest_api_url = self.github_client.get_rest_api_url()
+        return None

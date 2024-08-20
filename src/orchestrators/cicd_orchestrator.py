@@ -17,3 +17,7 @@ class CicdOrchestratorInterface(ABC):
     @abstractmethod
     def notify_abandoned_pr_tasks(self):
         pass
+
+    @abstractmethod
+    def set_git_repository(self, repo_name):
+        pass

@@ -112,6 +112,13 @@ class FluxGitopsOperator(GitopsOperatorInterface):
 
         return is_finished, is_successful
 
+    def get_repo_name(self, phase_data) -> str:
+        repo_name = ''
+        if 'azdoPrRepoName' in phase_data['metadata']:
+            repo_name = phase_data['metadata']['azdoPrRepoName']
+        return repo_name
+
+
     def get_commit_id(self, phase_data) -> str:
         revision = ''
         if self._get_message_kind(phase_data) == "Kustomization":
