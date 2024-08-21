@@ -9,6 +9,7 @@ from repositories.git_repository_factory import GitRepositoryFactory
 from repositories.raw_subscriber import RawSubscriberFactory
 from orchestrators.cicd_orchestrator_factory import CicdOrchestratorFactory
 
+
 # Instance is shared across threads.
 class GitopsConnector:
 
