@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: PR
 
 on:
@@ -8,22 +9,46 @@ jobs:
   code_quality_checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - uses: TrueBrain/actions-flake8@master
-        name: Linting
-        if: "true"
+      - uses: actions/checkout@v4
+      - uses: TrueBrain/actions-flake8@v2
         with:
-          path: ./src    
-      - uses: hadolint/hadolint-action@v1.5.0
-        name: Docker Linting
+          path: ./src
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: ./src/Dockerfile
-      - name: MD Linting
-        uses: actionshub/markdownlint@main    
-      - name: Stay woke
-        uses: get-woke/woke-action@v0
+      - uses: actionshub/markdownlint@main
+      - uses: get-woke/woke-action@v0
         with:
           # Cause the check to fail on any broke rules
-          fail-on-error: true              
+          fail-on-error: true
 
+  chart-testing:
+    runs-on: ubuntu-latest
+    env:
+      CT_GITHUB_GROUPS: "true"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - uses: helm/chart-testing-action@v2
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: if [[ -n "$(ct list-changed --config ct.yaml)" ]]; then echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Run chart-testing (lint)
+        if: ${{ steps.list-changed.outputs.changed == 'true' }}
+        run: ct lint --config ct.yaml
+      - uses: helm/kind-action@v1.10.0
+        if: ${{ steps.list-changed.outputs.changed == 'true' }}
+      - name: Run chart-testing (install)
+        if: ${{ steps.list-changed.outputs.changed == 'true' }}
+        run: ct install --config ct.yaml --helm-extra-set-args "--set=orchestratorPAT=${{ secrets.GITHUB_TOKEN }}"
+
+  publish-testing:
+    uses: ./.github/workflows/publish.yaml
+    secrets: inherit
+    permissions:
+      contents: write
+      packages: write

@@ -1,0 +1,8 @@
+{{- if .Values.subscribers -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gitops-connector.fullname" . }}-subscribers
+  labels: {{- include "gitops-connector.labels" . | nindent 4 }}
+data: {{- toYaml .Values.subscribers | nindent 2 }}
+{{- end }}
