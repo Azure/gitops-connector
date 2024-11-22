@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 jobs:
-  code-quality:
+  code_quality_checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
