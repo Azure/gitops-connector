@@ -1,0 +1,27 @@
+# https://taskfile.dev
+
+version: '3'
+
+dotenv: ['taskfile.env']
+
+tasks:
+  build:
+    cmds:
+    - docker build ./src -t {{.ACR}}.azurecr.io/markphillips100/gitops-connector:{{.TAG}}
+
+  push:
+    cmds:
+    - docker push {{.ACR}}.azurecr.io/markphillips100/gitops-connector:{{.TAG}}
+
+  helm-install:
+    cmds:
+      - helm install gitops-connector ./manifests/helm --namespace gitops -f values.yaml
+
+  helm-uninstall:
+    cmds:
+      - helm uninstall gitops-connector --namespace gitops
+
+  acr-login:
+    desc: Access ACR to support docker push.
+    cmds:
+      - cmd: az acr login --name {{.ACR}} --expose-token

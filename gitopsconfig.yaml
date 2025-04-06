@@ -1,0 +1,12 @@
+apiVersion: example.com/v1
+kind: GitOpsConfig
+metadata:
+  name: ezievent-identityservice-gitops-stage-dev
+spec:
+  gitRepositoryType: "AZDO"
+  ciCdOrchestratorType: "AZDO"
+  gitOpsOperatorType: "ARGOCD"
+  gitOpsAppURL: "https://dev.azure.com/ezievent/EziEvent/_git/ezievent-identityservice-gitops"
+  azdoGitOpsRepoName: "ezievent-identityservice-gitops"
+  azdoPrRepoName: "ezievent-identityservice-gitops"
+  azdoOrgUrl: "https://dev.azure.com/ezievent/EziEvent"
