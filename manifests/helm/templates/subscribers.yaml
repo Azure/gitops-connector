@@ -1,10 +1,8 @@
-{{ if .Values.subscribers }}
+{{- if .Values.subscribers -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: gitops-connector-subscribers-config
-data:
-  {{- range $key, $val := .Values.subscribers }}
-    {{ $key }}: {{ $val | quote }}
-  {{- end }}
-{{ end }}
+  name: {{ include "gitops-connector.fullname" . }}-subscribers
+  labels: {{- include "gitops-connector.labels" . | nindent 4 }}
+data: {{- toYaml .Values.subscribers | nindent 2 }}
+{{- end }}
