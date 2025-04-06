@@ -20,7 +20,7 @@ class RawSubscriber:
 
     def post_commit_status(self, commit_status):
         json_data = dataclasses.asdict(commit_status)
-        logging.debug("Sending raw json to subscriber: " + json.dumps(json_data))
+        logging.debug("Sending raw json to subscriber: " + json.dumps(json_data, indent=2))
         response = requests.post(url=self._url_endpoint, json=json_data)
         response.raise_for_status()
 

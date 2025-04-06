@@ -5,6 +5,7 @@ from collections import defaultdict
 import logging
 from operators.gitops_operator import GitopsOperatorInterface
 from operators.git_commit_status import GitCommitStatus
+from configuration.gitops_config import GitOpsConfig
 
 KUSTOMIZATION_PHASE = "Kustomization"
 PROGRESSING_STATE = "Progressing"
@@ -12,6 +13,9 @@ HEALTH_CHECK_FAILED_STATE = "HealthCheckFailed"
 
 
 class FluxGitopsOperator(GitopsOperatorInterface):
+
+    def __init__(self, gitops_config: GitOpsConfig):
+        super().__init__(gitops_config)
 
     def extract_commit_statuses(self, phase_data):
         commit_statuses = []
@@ -128,6 +132,12 @@ class FluxGitopsOperator(GitopsOperatorInterface):
                 revision = phase_data['metadata']['source.toolkit.fluxcd.io/revision']
 
         return parse_commit_id(revision)
+    
+    def is_supported_operator(self, phase_data) -> bool:
+        return (self.gitops_config.name == 'singleInstance' or
+               (self.gitops_config.name != 'singleInstance' and 
+                'gitops_connector_config_name' in phase_data['metadata'] and 
+                phase_data['metadata']['gitops_connector_config_name'] == self.gitops_config.name))
 
     def is_supported_message(self, phase_data) -> bool:
         kind = self._get_message_kind(phase_data)
@@ -136,7 +146,7 @@ class FluxGitopsOperator(GitopsOperatorInterface):
         reason = phase_data['reason']
         logging.debug(f'Reason: {reason}')
 
-        return (kind == 'Kustomization' or kind == 'GitRepository' and reason != 'NewArtifact')
+        return self.is_supported_operator(phase_data) and (kind == 'Kustomization' or kind == 'GitRepository' and reason != 'NewArtifact')
 
     def _get_message_kind(self, phase_data) -> str:
         return phase_data['involvedObject']['kind']
