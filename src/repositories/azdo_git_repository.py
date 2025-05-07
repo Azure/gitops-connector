@@ -2,27 +2,29 @@
 # Licensed under the MIT License.
 
 import os
+import logging
 import json
 import requests
 import utils
 from clients.azdo_client import AzdoClient
 from repositories.git_repository import GitRepositoryInterface
-
+from configuration.gitops_config import GitOpsConfig
 
 PR_METADATA_KEY = "callback-task-id"
 
 
 class AzdoGitRepository(GitRepositoryInterface):
 
-    def __init__(self):
-        self.gitops_repo_name = utils.getenv("AZDO_GITOPS_REPO_NAME")
-        self.pr_repo_name = os.getenv("AZDO_PR_REPO_NAME", self.gitops_repo_name)
-        self.azdo_client = AzdoClient()
+    def __init__(self, gitops_config: GitOpsConfig):
+        self.gitops_repo_name = gitops_config.azdo_gitops_repo_name # utils.getenv("AZDO_GITOPS_REPO_NAME")
+        self.pr_repo_name = gitops_config.azdo_pr_repo_name # os.getenv("AZDO_PR_REPO_NAME", self.gitops_repo_name)
+        self.azdo_client = AzdoClient(gitops_config)
         self.repository_api = f'{self.azdo_client.get_rest_api_url()}/_apis/git/repositories/{self.gitops_repo_name}'
         self.pr_repository_api = f'{self.azdo_client.get_rest_api_url()}/_apis/git/repositories/{self.pr_repo_name}'
         self.headers = self.azdo_client.get_rest_api_headers()
 
     def post_commit_status(self, commit_status):
+        logging.debug(f'post_commit_status called.  commit_status: {commit_status}')
         url = f'{self.repository_api}/commits/{commit_status.commit_id}/statuses?api-version=6.0'
 
         azdo_status = self._map_to_azdo_status(commit_status.state)
@@ -54,6 +56,7 @@ class AzdoGitRepository(GitRepositoryInterface):
 
         # Navigate the properties response structure
         result = response.json()
+        logging.debug(f'get_pr_metadata called. metadata: {json.dumps(result, indent=2)}')
         if (result['count'] > 0):
             properties = result['value']
             entry = properties.get(PR_METADATA_KEY)
@@ -69,6 +72,8 @@ class AzdoGitRepository(GitRepositoryInterface):
         if pr_status:
             pr_status_param = f'searchCriteria.status={pr_status}&'
         url = f'{self.pr_repository_api}/pullRequests?{pr_status_param}api-version=6.0'
+
+        logging.debug(f'get_prs: url: {url}')
         response = requests.get(url=url, headers=self.headers)
         # Throw appropriate exception if request failed
         response.raise_for_status()
@@ -77,7 +82,9 @@ class AzdoGitRepository(GitRepositoryInterface):
         if pr_response['count'] == 0:
             return None
 
-        return pr_response['value']
+        val = pr_response['value']
+        logging.debug(f'get_prs: value: {val}')
+        return val
 
     def _map_to_azdo_status(self, status):
         status_map = {

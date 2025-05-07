@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gitops-connector.fullname" . }}
+  labels: {{- include "gitops-connector.labels" . | nindent 4 }}
+data:
+
+  {{- if .Values.singleInstance }}
+
+  GIT_REPOSITORY_TYPE: {{ required "Provide a value for gitRepositoryType" .Values.singleInstance.gitRepositoryType}}
+  CICD_ORCHESTRATOR_TYPE: {{ required "Provide a value for ciCdOrchestratorType" .Values.singleInstance.ciCdOrchestratorType}}
+  GITOPS_OPERATOR_TYPE: {{ required "Provide a value for gitOpsOperatorType" .Values.singleInstance.gitOpsOperatorType}}
+  GITOPS_APP_URL: {{ required "Provide a value for gitOpsAppURL" .Values.singleInstance.gitOpsAppURL}}
+
+  {{- if eq .Values.singleInstance.gitRepositoryType "AZDO"}}
+  AZDO_GITOPS_REPO_NAME: {{ required "Provide a value for azdoGitOpsRepoName" .Values.singleInstance.azdoGitOpsRepoName}}
+  {{- end }}
+
+  {{- if and (eq .Values.singleInstance.ciCdOrchestratorType "AZDO") (.Values.singleInstance.azdoPrRepoName)}}
+  AZDO_PR_REPO_NAME: {{ .Values.singleInstance.azdoPrRepoName}}
+  {{- end }}
+
+  {{- if or (eq .Values.singleInstance.gitRepositoryType "AZDO") (eq .Values.singleInstance.ciCdOrchestratorType "AZDO")}}
+  AZDO_ORG_URL: {{ required "Provide a value for azdoOrgUrl" .Values.singleInstance.azdoOrgUrl}}
+  {{- end }}
+
+  {{- if eq .Values.singleInstance.ciCdOrchestratorType "GITHUB"}}
+  GITHUB_GITOPS_REPO_NAME: {{ required "Provide a value for gitHubGitOpsRepoName" .Values.singleInstance.gitHubGitOpsRepoName}}
+  {{- end }}
+
+  {{- if eq .Values.singleInstance.gitRepositoryType "GITHUB"}}
+  GITHUB_GITOPS_MANIFEST_REPO_NAME: {{ required "Provide a value for gitHubGitOpsManifestsRepoName" .Values.singleInstance.gitHubGitOpsManifestsRepoName}}
+  {{- end }}
+
+  {{- if or (eq .Values.singleInstance.gitRepositoryType "GITHUB") (eq .Values.singleInstance.ciCdOrchestratorType "GITHUB")}}
+  GITHUB_ORG_URL: {{ required "Provide a value for gitHubOrgUrl" .Values.singleInstance.gitHubOrgUrl}}
+  {{- end }}
+
+  {{- end }}  
