@@ -17,6 +17,7 @@ from configuration.gitops_config import GitOpsConfig
 PR_CLEANUP_INTERVAL = 1 * 30
 DISABLE_POLLING_PR_TASK = False
 
+
 # Instance is shared across threads.
 class GitopsConnector:
 
@@ -29,7 +30,7 @@ class GitopsConnector:
 
         self.status_thread = None
         self.status_thread_running = False
-        
+
         self.cleanup_task = Timeloop()
         self.cleanup_task_running = False
 
@@ -47,7 +48,7 @@ class GitopsConnector:
 
     def is_supported_message(self, payload):
         return self._gitops_operator.is_supported_message(payload)
-    
+
     def start_background_work(self):
         self._start_status_thread()
         self._start_cleanup_task()
@@ -142,4 +143,3 @@ class GitopsConnector:
 
             except Exception as e:
                 logging.error(f'Unexpected exception in the message queue draining thread: {e}')
-

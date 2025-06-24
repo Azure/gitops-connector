@@ -54,7 +54,7 @@ singleInstance:
 
 # specify values for a multiple instances configuration
 multipleInstances:
-  clusterDomain: apps-crc.testing
+  clusterDomain: example.com
 
 # -- Partially override resource names (adds suffix)
 # @section -- Common

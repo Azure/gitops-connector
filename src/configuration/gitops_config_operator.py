@@ -1,10 +1,12 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 import kopf
 import logging
 from kubernetes import config as k8s_config
-from threading import Thread
 from configuration.gitops_config import GitOpsConfig
-from typing import Callable, Optional, List
 from configuration.gitops_connector_manager import GitOpsConnectorManager
+
 
 class GitOpsConfigOperator:
     def __init__(self, connector_manager: GitOpsConnectorManager):
@@ -61,10 +63,6 @@ class GitOpsConfigOperator:
     def get_configuration(self, name):
         """Get the configuration object by name."""
         return self.configurations.get(name)
-    
-    # def get_gitops_connector(self, name):
-    #     """Get the gitops_connector object by name."""
-    #     return self.connector_manager.connectors.get(name)
 
     def stop_all(self):
         self.connector_manager.stop_all()

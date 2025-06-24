@@ -132,11 +132,11 @@ class FluxGitopsOperator(GitopsOperatorInterface):
                 revision = phase_data['metadata']['source.toolkit.fluxcd.io/revision']
 
         return parse_commit_id(revision)
-    
+
     def is_supported_operator(self, phase_data) -> bool:
         return (self.gitops_config.name == 'singleInstance' or
-               (self.gitops_config.name != 'singleInstance' and 
-                'gitops_connector_config_name' in phase_data['metadata'] and 
+               (self.gitops_config.name != 'singleInstance' and
+                'gitops_connector_config_name' in phase_data['metadata'] and
                 phase_data['metadata']['gitops_connector_config_name'] == self.gitops_config.name))
 
     def is_supported_message(self, phase_data) -> bool:

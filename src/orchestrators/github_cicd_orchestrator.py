@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 import logging
-import utils
 import requests
 from orchestrators.cicd_orchestrator import CicdOrchestratorInterface
 from repositories.git_repository import GitRepositoryInterface
@@ -14,7 +13,7 @@ class GitHubCicdOrchestrator(CicdOrchestratorInterface):
 
     def __init__(self, git_repository: GitRepositoryInterface, gitops_config: GitOpsConfig):
         super().__init__(git_repository)
-        self.gitops_repo_name = gitops_config.github_gitops_repo_name # utils.getenv("GITHUB_GITOPS_REPO_NAME")  # cloud-native-ops
+        self.gitops_repo_name = gitops_config.github_gitops_repo_name
         self.github_client = GitHubClient(gitops_config)
         self.headers = self.github_client.get_rest_api_headers()
         self.rest_api_url = self.github_client.get_rest_api_url()

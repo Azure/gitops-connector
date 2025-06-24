@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-import utils
 from operators.argo_gitops_operator import ArgoGitopsOperator
 from operators.flux_gitops_operator import FluxGitopsOperator
 from operators.gitops_operator import GitopsOperatorInterface
@@ -16,7 +15,7 @@ class GitopsOperatorFactory:
 
     @staticmethod
     def new_gitops_operator(gitops_config: GitOpsConfig) -> GitopsOperatorInterface:
-        gitops_operator_type = gitops_config.gitops_operator_type # utils.getenv("GITOPS_OPERATOR_TYPE", FLUX_TYPE)
+        gitops_operator_type = gitops_config.gitops_operator_type
 
         if gitops_operator_type == FLUX_TYPE:
             return FluxGitopsOperator(gitops_config)

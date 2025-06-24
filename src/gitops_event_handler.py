@@ -5,7 +5,6 @@ from flask import Flask, request
 import logging
 import kopf
 from kubernetes import client, config
-from kubernetes.client.rest import ApiException
 import atexit
 import time
 import utils
@@ -42,11 +41,11 @@ if git_repository_type:
 else:
     logging.debug('Detected no ENV configuration data.  Running in multiple instance configuration mode via gitopsconfig resources.')
     try:
-        cluster_domain=utils.getenv('CLUSTER_DOMAIN')
+        cluster_domain = utils.getenv('CLUSTER_DOMAIN')
         logging.debug(f"cluster domain: '{cluster_domain}'")
         config.load_incluster_config()  # In-cluster Kubernetes config
         api_instance = client.CustomObjectsApi()
-        instances  = api_instance.list_cluster_custom_object(cluster_domain, "v1", "gitopsconfigs")
+        instances = api_instance.list_cluster_custom_object(cluster_domain, "v1", "gitopsconfigs")
         for instance in instances.get("items"):
             config_name = instance.get("metadata").get("name")
             config_namespace = instance.get("metadata").get("namespace")
@@ -77,7 +76,6 @@ else:
     kopf_thread.start()
 
 
-
 @application.route("/gitopsphase", methods=['POST'])
 def gitopsphase():
     # Use per process timer to stash the time we got the request
@@ -99,7 +97,7 @@ def gitopsphase():
     logging.debug(f'GitOps phase: {payload}')
 
     gitops_connector = connector_manager.get_supported_gitops_connector(payload)
-    if gitops_connector != None:
+    if gitops_connector is not None:
         gitops_connector.process_gitops_phase(payload, req_time)
 
     return f'GitOps phase: {payload}', 200
@@ -107,6 +105,7 @@ def gitopsphase():
 
 def interrupt():
     connector_manager.stop_all()
+
 
 atexit.register(interrupt)
 

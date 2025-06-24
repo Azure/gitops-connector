@@ -2,18 +2,18 @@
 # Licensed under the MIT License.
 
 import requests
-import utils
 import logging
 from clients.github_client import GitHubClient
 from repositories.git_repository import GitRepositoryInterface
 from configuration.gitops_config import GitOpsConfig
+
 
 class GitHubGitRepository(GitRepositoryInterface):
 
     MAX_DESCR_LENGTH = 140
 
     def __init__(self, gitops_config: GitOpsConfig):
-        self.gitops_repo_name = gitops_config.github_gitops_manifests_repo_name # utils.getenv("GITHUB_GITOPS_MANIFEST_REPO_NAME")  # gitops-manifests
+        self.gitops_repo_name = gitops_config.github_gitops_manifests_repo_name
         self.github_client = GitHubClient(gitops_config)
         self.headers = self.github_client.get_rest_api_headers()
         self.rest_api_url = self.github_client.get_rest_api_url()

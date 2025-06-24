@@ -1,12 +1,15 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 class GitOpsConfig:
     def __init__(self,
-                 name, 
-                 git_repository_type, 
-                 cicd_orchestrator_type, 
-                 gitops_operator_type, 
-                 gitops_app_url, 
-                 azdo_gitops_repo_name=None, 
-                 azdo_pr_repo_name=None, 
+                 name,
+                 git_repository_type,
+                 cicd_orchestrator_type,
+                 gitops_operator_type,
+                 gitops_app_url,
+                 azdo_gitops_repo_name=None,
+                 azdo_pr_repo_name=None,
                  azdo_org_url=None,
                  github_gitops_repo_name=None,
                  github_gitops_manifests_repo_name=None,

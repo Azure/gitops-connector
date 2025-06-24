@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-import os
 from repositories.git_repository import GitRepositoryInterface
 from repositories.azdo_git_repository import AzdoGitRepository
 from repositories.github_git_repository import GitHubGitRepository
@@ -15,8 +14,8 @@ GITHUB_TYPE = "GITHUB"
 class GitRepositoryFactory:
 
     @staticmethod
-    def new_git_repository(gitops_config:GitOpsConfig) -> GitRepositoryInterface:
-        git_repository_type = gitops_config.git_repository_type # os.getenv("GIT_REPOSITORY_TYPE", AZDO_TYPE)
+    def new_git_repository(gitops_config: GitOpsConfig) -> GitRepositoryInterface:
+        git_repository_type = gitops_config.git_repository_type
 
         if git_repository_type == AZDO_TYPE:
             return AzdoGitRepository(gitops_config)

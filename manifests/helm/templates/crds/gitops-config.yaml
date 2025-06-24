@@ -2,9 +2,9 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: gitopsconfigs.example.com  # Replace 'example.com' with your domain
+  name: gitopsconfigs.{{ .Values.multipleInstances.clusterDomain }}  
 spec:
-  group: example.com  # Replace 'example.com' with your domain
+  group: {{ .Values.multipleInstances.clusterDomain }}
   names:
     kind: GitOpsConfig
     plural: gitopsconfigs
