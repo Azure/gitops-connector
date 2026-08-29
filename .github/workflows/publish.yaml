@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
     - name: Download Image Tags
-      uses: dawidd6/action-download-artifact@v2
+      uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
       with:
         name: image_tags
         workflow: ci.yml
@@ -27,7 +27,7 @@ jobs:
         run_id: ${{ github.event.workflow_run.id }}        
         path: ${{ github.workspace }}
     - name: Download Manifests
-      uses: dawidd6/action-download-artifact@v2
+      uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
       with:
         name: manifests
         workflow: ci.yml

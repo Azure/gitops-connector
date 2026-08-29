@@ -10,20 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
       - uses: TrueBrain/actions-flake8@master
         name: Linting
         if: "true"
         with:
           path: ./src
-      - uses: hadolint/hadolint-action@v1.5.0
+      - uses: hadolint/hadolint-action@c27bd9edc1e95eed30474db8f295ff5807ebca14 # v1.5.0
         name: Docker Linting
         with:
           dockerfile: ./src/Dockerfile
       - name: MD Linting
         uses: actionshub/markdownlint@main
       - name: Stay woke
-        uses: get-woke/woke-action@v0
+        uses: get-woke/woke-action@b2ec032c4a2c912142b38a6a453ad62017813ed0 # v0
         with:
           # Cause the check to fail on any broke rules
           fail-on-error: true
@@ -35,9 +35,9 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@dd4fa0671be5250ee6f50aedf4cb05514abda2c7 # v1.14.1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -49,18 +49,18 @@ jobs:
            echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV          
            echo $IMAGE_TAG > $GITHUB_WORKSPACE/IMAGE_TAG
       - name: Build and Push to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a # v2.10.0
         with:
           push: true
           context: ./src
           tags: ghcr.io/azure/gitops-connector:${{ env.IMAGE_TAG }}, ghcr.io/azure/gitops-connector:latest
       - name: Upload Image Tags
-        uses: actions/upload-artifact@v2.2.2
+        uses: actions/upload-artifact@e448a9b857ee2131e752b06002bf0e093c65e571 # v2.2.2
         with:
           name: image_tags
           path: ${{ github.workspace }}/IMAGE_TAG
       - name: Upload Manifests Templates
-        uses: actions/upload-artifact@v2.2.2
+        uses: actions/upload-artifact@e448a9b857ee2131e752b06002bf0e093c65e571 # v2.2.2
         with:
           name: manifests
           path: ${{ github.workspace }}/manifests
