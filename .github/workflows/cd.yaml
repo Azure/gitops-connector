@@ -15,16 +15,16 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Download Image Tags
-        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
+        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           name: image_tags
           workflow: ci.yml
           run_id: ${{ github.event.workflow_run.id}}
           path: ${{ github.workspace }}
       - name: Download Manifests
-        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
+        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           name: manifests
           workflow: ci.yml
